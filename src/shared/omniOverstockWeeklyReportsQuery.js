@@ -1,4 +1,4 @@
-const sqlQuery = `select
+const omniOverstockWeeklyReportsSqlQuery = `select
   s.file_date as "Order Create Date - Y-M-D",
   s.house_bill_nbr as "HouseBill",
   s.file_nbr as "Job Number",
@@ -98,4 +98,4 @@ const sqlQuery = `select
   and s.bill_to_nbr = '11912'`;
 
 
-  module.exports = {sqlQuery};
+module.exports = { omniOverstockWeeklyReportsSqlQuery };

@@ -1,5 +1,5 @@
 const { Client } = require('pg');
-const { sqlQuery } = require("./shared/query");
+const { omniOverstockWeeklyReportsSqlQuery } = require("./shared/omniOverstockWeeklyReportsQuery");
 const XLSX = require('xlsx');
 const fs = require('fs');
 const client = require('ssh2').Client;
@@ -8,16 +8,16 @@ const client = require('ssh2').Client;
 
 module.exports.handler = async () => {
   try {
-    await fetchDataFromRedshift(sqlQuery);
+    await fetchDataFromRedshift(omniOverstockWeeklyReportsSqlQuery);
   } catch (err) {
-    console.log("handler:error",err);
+    console.log("handler:error", err);
   }
   console.log("end of the code");
 };
 
 
 
-async function fetchDataFromRedshift(sqlQuery) {
+async function fetchDataFromRedshift(omniOverstockWeeklyReportsSqlQuery) {
   const client = new Client({
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
@@ -26,7 +26,7 @@ async function fetchDataFromRedshift(sqlQuery) {
     database: process.env.DB_DATABASE
   });
   try {
-    const query = sqlQuery
+    const query = omniOverstockWeeklyReportsSqlQuery
     await client.connect();
 
     const res = await client.query(query);
@@ -59,32 +59,32 @@ async function jsonToXls(jreportsArray, fileName) {
 }
 
 
-const uploadFile = (filename)=> {
-  return new Promise(async(resolve,reject)=>{
-    try{
-  const conn = new client();
-  conn.on('ready', function () {
-    conn.sftp(function (err, sftp) {
-      if (err) throw err;
-      const readStream = fs.createReadStream(filename);
-      console.log("readStream==> ", readStream)
-      const writeStream = sftp.createWriteStream(`/incoming/${filename}`);
-      writeStream.on('close', function () {
-         console.log('File has been transferred successfully!');
-         conn.end();
-         resolve("connection ended")
-       });
-      readStream.pipe(writeStream);
-    });
-  }).connect({
-    host: process.env.SFTP_HOST,
-    port: process.env.SFTP_PORT,
-    username: process.env.SFTP_USERNAME,
-    password: process.env.SFTP_PASSWORD
-  });
-}catch(error){
-  console.log("Error:uploadFile",error)
-  reject(error)
-}
-})
+const uploadFile = (filename) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const conn = new client();
+      conn.on('ready', function () {
+        conn.sftp(function (err, sftp) {
+          if (err) throw err;
+          const readStream = fs.createReadStream(filename);
+          console.log("readStream==> ", readStream)
+          const writeStream = sftp.createWriteStream(`/incoming/${filename}`);
+          writeStream.on('close', function () {
+            console.log('File has been transferred successfully!');
+            conn.end();
+            resolve("connection ended")
+          });
+          readStream.pipe(writeStream);
+        });
+      }).connect({
+        host: process.env.SFTP_HOST,
+        port: process.env.SFTP_PORT,
+        username: process.env.SFTP_USERNAME,
+        password: process.env.SFTP_PASSWORD
+      });
+    } catch (error) {
+      console.log("Error:uploadFile", error)
+      reject(error)
+    }
+  })
 }

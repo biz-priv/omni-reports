@@ -38,14 +38,4 @@ layers:
     retain: false
 
 functions:
-  generateWeeklyReports: ${file(config/functions/omniOverstockWeeklyReport.yml):function}
-
-resources:
-  CloudWatchEventRule:
-    Type: AWS::Events::Rule
-    Properties:
-      ScheduleExpression: cron(0 3 * * 3)
-      State: ENABLED
-      Targets:
-        - Id: my-weekly-report
-          Arn: !GetAtt generateWeeklyReports.Arn
+  omniOverstockWeeklyReport: ${file(config/functions/omniOverstockWeeklyReport.yml):function}
