@@ -1,0 +1,28 @@
+---
+function:
+  name: omni-overstock-weekly-reports-${self:provider.stage}
+  description: sending overstock reports every wednesday on 3AM MST
+  handler: src/index.handler
+  memorySize: 1024
+  timeout: 90
+  layers:
+    - { Ref: OmniReportsLayerLambdaLayer }
+  package:
+    patterns:
+     - '!**/*'
+     - 'src/index.js'  
+     - "src/shared/**"
+  events:
+    - cloudwatchEvent:
+        name: omni-overstock-weekly-report
+        schedule: cron(0 3 * * 3)
+  environment:
+    DB_HOST: ${ssm:/omni-overstock-weekly-reports/${self:provider.stage}/db.host~true}
+    DB_PORT: ${ssm:/omni-overstock-weekly-reports/${self:provider.stage}/db.port~true}
+    DB_USERNAME: ${ssm:/omni-overstock-weekly-reports/${self:provider.stage}/db.username~true}
+    DB_PASSWORD: ${ssm:/omni-overstock-weekly-reports/${self:provider.stage}/db.password~true}
+    DB_DATABASE: ${ssm:/omni-overstock-weekly-reports/${self:provider.stage}/db.database~true}
+    SFTP_HOST: ${ssm:/omni-overstock-weekly-reports/${self:provider.stage}/sftp.host~true}
+    SFTP_PORT: ${ssm:/omni-overstock-weekly-reports/${self:provider.stage}/sftp.port~true}
+    SFTP_USERNAME: ${ssm:/omni-overstock-weekly-reports/${self:provider.stage}/sftp.username~true}
+    SFTP_PASSWORD: ${ssm:/omni-overstock-weekly-reports/${self:provider.stage}/sftp.password~true}
