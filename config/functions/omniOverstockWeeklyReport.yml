@@ -13,9 +13,8 @@ function:
      - 'src/index.js'  
      - "src/shared/**"
   events:
-    - cloudwatchEvent:
-        name: omni-overstock-weekly-report
-        schedule: cron(0 3 * * 3)
+    - schedule: cron(0 10 * * 4)
+        name: omni-overstock-weekly-report-${self:provider.stage}
   environment:
     DB_HOST: ${ssm:/omni-overstock-weekly-reports/${self:provider.stage}/db.host~true}
     DB_PORT: ${ssm:/omni-overstock-weekly-reports/${self:provider.stage}/db.port~true}
