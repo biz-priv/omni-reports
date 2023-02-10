@@ -79,14 +79,6 @@ async function fetchDataFromRedshift() {
     const workbook = new Excel.Workbook();
     let worksheet = workbook.addWorksheet('Sheet1');
 
-    worksheet.mergeCells('A1:D1');
-    worksheet.getCell('A1').value = 'Weekly Service Report';
-    worksheet.getCell('A1').alignment = { vertical: 'middle', horizontal: 'center' };
-    worksheet.getCell('A1').font = { size: 20, bold: true };
-    worksheet.mergeCells('A2:D2');
-    worksheet.getCell('A2').value = new Date().toISOString().substring(0, 10);
-    worksheet.getCell('A2').alignment = { vertical: 'middle', horizontal: 'center' };
-
     let fields = [
       { header: 'Actual Departure Date - Y-M-D', key: 'actualdepartdate' },
       { header: 'House Ref', key: 'houseref' },
