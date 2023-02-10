@@ -38,5 +38,5 @@ layers:
     retain: false
 
 functions:
-  # omniOverstockWeeklyReport: ${file(config/functions/omniOverstockWeeklyReport.yml):function}
+  omniOverstockWeeklyReport: ${file(config/functions/omniOverstockWeeklyReport.yml):function}
   omniWeeklyServiceReport: ${file(config/functions/omniWeeklyServiceReport.yml):function}
