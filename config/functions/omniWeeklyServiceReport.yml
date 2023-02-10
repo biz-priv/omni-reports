@@ -19,7 +19,6 @@ function:
      - "src/shared/**"
   events:
     - schedule: cron(0 10 * * 4)
-      name: omni-weekly-service-report-${self:provider.stage}
   environment:
     DB_HOST: ${ssm:/omni-dw/${self:provider.stage}/db/host/url~true}
     DB_PORT: ${ssm:/omni-dw/${self:provider.stage}/db/port}

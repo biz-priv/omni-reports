@@ -14,7 +14,6 @@ function:
      - "src/shared/**"
   events:
     - schedule: cron(0 10 * * 4)
-      name: omni-overstock-weekly-report-${self:provider.stage}
   environment:
     DB_HOST: ${ssm:/omni-overstock-weekly-reports/${self:provider.stage}/db.host~true}
     DB_PORT: ${ssm:/omni-overstock-weekly-reports/${self:provider.stage}/db.port~true}
