@@ -1,6 +1,7 @@
 const { Client } = require('pg');
-const { omniOverstockWeeklyReportsSqlQuery } = require("./shared/omniOverstockWeeklyReportsQuery");
+const { omniOverstockWeeklyReportsSqlQuery } = require("../shared/omniOverstockWeeklyReportsQuery");
 const XLSX = require('xlsx');
+const json2csv = require('json2csv').parse;
 const fs = require('fs');
 const client = require('ssh2').Client;
 
@@ -34,9 +35,9 @@ async function fetchDataFromRedshift(omniOverstockWeeklyReportsSqlQuery) {
     console.log(res.rows[1]);
     const jreportsArray = res.rows
     const timestamp = new Date()
-    const filename = "OMNI_OVST_REPORT_" + timestamp.toISOString().substring(5, 10) + '-' + timestamp.toISOString().substring(0, 4) + ".xls"
+    const filename = "OMNI_OVST_REPORT_" + timestamp.toISOString().substring(5, 10) + '-' + timestamp.toISOString().substring(0, 4) + ".csv"
     console.log(filename)
-    await jsonToXls(jreportsArray, filename)
+    await convertToCSV(jreportsArray, filename);
     await uploadFile(filename);
     await client.end();
   }
@@ -46,17 +47,16 @@ async function fetchDataFromRedshift(omniOverstockWeeklyReportsSqlQuery) {
 }
 
 
-async function jsonToXls(jreportsArray, fileName) {
+async function convertToCSV(jreportsArray, filename) {
   try {
-    const workbook = XLSX.utils.book_new();
-    const worksheet = XLSX.utils.json_to_sheet(jreportsArray);
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
-    XLSX.writeFile(workbook, fileName);
-  }
-  catch (error) {
-    console.log("jsonToXls:", error)
+    const csv = json2csv(jreportsArray);
+    await fs.promises.writeFile(filename, csv);
+    console.log(`JSON data successfully converted to CSV and saved at ${filename}`);
+  } catch (error) {
+    console.error(`Error converting JSON data to CSV: ${error}`);
   }
 }
+
 
 
 const uploadFile = (filename) => {

@@ -2,7 +2,7 @@
 function:
   name: omni-overstock-weekly-reports-${self:provider.stage}
   description: sending overstock reports every wednesday on 3AM MST
-  handler: src/index.handler
+  handler: src/omniOverstockReport/index.handler
   memorySize: 1024
   timeout: 90
   layers:
@@ -10,11 +10,11 @@ function:
   package:
     patterns:
      - '!**/*'
-     - 'src/index.js'  
+     - 'src/omniOverstockReport/index.js'  
      - "src/shared/**"
   events:
     - schedule: cron(0 10 * * 4)
-        name: omni-overstock-weekly-report-${self:provider.stage}
+      name: omni-overstock-weekly-report-${self:provider.stage}
   environment:
     DB_HOST: ${ssm:/omni-overstock-weekly-reports/${self:provider.stage}/db.host~true}
     DB_PORT: ${ssm:/omni-overstock-weekly-reports/${self:provider.stage}/db.port~true}
