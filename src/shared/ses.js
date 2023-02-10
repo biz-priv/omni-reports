@@ -1,16 +1,8 @@
-const aws = require('aws-sdk');
 const nodemailer = require("nodemailer");
-
-const ses = new aws.SES();
 
 async function sendEmail(sesParams) {
 
   try {
-
-    console.log("process.env.SMTP_HOST", process.env.SMTP_HOST);
-    console.log("process.env.SMTP_PORT", process.env.SMTP_PORT);
-    console.log("process.env.SMTP_USERNAME", process.env.SMTP_USERNAME);
-    console.log("process.env.SMTP_PASSWORD", process.env.SMTP_PASSWORD);
     let transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: process.env.SMTP_PORT,
