@@ -107,10 +107,10 @@ async function fetchDataFromRedshift() {
     ];
     worksheet.columns = fields;
     worksheet.addRows(rows);
-
+    const buffer = await workbook.xlsx.writeBuffer();
     console.log("Workbook prepared");
 
-    await sendAnEmail(workbook, filename)
+    await sendAnEmail(buffer, filename)
 
     // await convertToCSV(rows, filename);
     // await uploadFile(filename);
@@ -180,7 +180,8 @@ async function sendAnEmail(data, filename) {
     text: `This is a weekly service report.`,
     attachments: [{
         filename: filename,
-        content: data
+        content: data,
+        contentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     }]
   };
   await sendEmail(sesParams);
