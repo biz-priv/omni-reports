@@ -12,21 +12,14 @@ module.exports.handler = async () => {
   console.log("end of the code");
 };
 
-
-
 async function fetchDataFromRedshift() {
-  console.log("process.env.DB_HOST", process.env.DB_HOST);
-  console.log("process.env.DB_PORT", process.env.DB_PORT);
-  console.log("process.env.DB_USERNAME", process.env.DB_USERNAME);
-  console.log("process.env.DB_PASSWORD", process.env.DB_PASSWORD);
-  console.log("process.env.DB_DATABASE", process.env.DB_DATABASE);
 
   const client = new Client({
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     user: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE
+    database: process.env.DB_DATABASE,
   });
   try {
     const query = `
@@ -77,105 +70,51 @@ async function fetchDataFromRedshift() {
     group by source_system ,file_nbr )refs
     on s.source_system = refs.source_system
     and s.file_nbr = refs.file_nbr
-    `
+    `;
     await client.connect();
 
     const { rows } = await client.query(query);
     await client.end();
-    console.log(rows[1]);
     
-    const filename = "OMNI_SERVICE_REPORT" + ".xlsx"
-    console.log(filename);
+    const filename = "OMNI_SERVICE_REPORT" + ".xlsx";
 
     const workbook = new Excel.Workbook();
     let worksheet = workbook.addWorksheet('Sheet1');
 
     let fields = [
-      { header: 'Actual Departure Date - Y-M-D', key: 'actualDepartDate' }, 
-      { header: 'House Ref', key: 'houseRef' },
-      { header: 'Consignor Name', key: 'consignorName' },
-      { header: 'Consignee Name', key: 'consigneeName' },
-      { header: 'Consignee City', key: 'consigneeCity' },
-      { header: 'Cosignee State', key: 'cosigneeState' },
-      { header: 'Consignee Zip', key: 'consigneeZip' },
-      { header: 'Service Level', key: 'serviceLevel' },
-      { header: 'Shippers Ref Number', key: 'shippersRefNumber' },
-      { header: 'Shipper Ref Number', key: 'ShipperRefNumber' },
-      { header: 'Outer', key: 'Outer' },
-      { header: 'Actual Weight (LBs)', key: 'actualWeight' },
-      { header: 'Job Total Sell', key: 'jobTotalSell' },
+      { header: 'Actual Departure Date - Y-M-D', key: 'actualdepartdate' }, 
+      { header: 'House Ref', key: 'houseref' },
+      { header: 'Consignor Name', key: 'consignorname' },
+      { header: 'Consignee Name', key: 'consigneename' },
+      { header: 'Consignee City', key: 'consigneecity' },
+      { header: 'Cosignee State', key: 'cosigneestate' },
+      { header: 'Consignee Zip', key: 'consigneezip' },
+      { header: 'Service Level', key: 'servicelevel' },
+      { header: 'Shippers Ref Number', key: 'shippersrefnumber' },
+      { header: 'Shipper Ref Number', key: 'shipperrefnumber' },
+      { header: 'Outer', key: 'outer' },
+      { header: 'Actual Weight (LBs)', key: 'actualweight' },
+      { header: 'Job Total Sell', key: 'jobtotalsell' },
     ];
     worksheet.columns = fields;
     worksheet.addRows(rows);
     const buffer = await workbook.xlsx.writeBuffer();
-    console.log("Workbook prepared");
 
-    await sendAnEmail(buffer, filename)
-
-    // await convertToCSV(rows, filename);
-    // await uploadFile(filename);
+    await sendAnEmail(buffer, filename);
     
   }
   catch (error) {
-    console.log("fetchDataFromRedshift:", error)
+    console.log("fetchDataFromRedshift:", error);
   }
-}
-
-
-async function convertToCSV(jreportsArray, filename) {
-  try {
-    const csv = json2csv(jreportsArray);
-    await fs.promises.writeFile(filename, csv);
-    console.log(`JSON data successfully converted to CSV and saved at ${filename}`);
-  } catch (error) {
-    console.error(`Error converting JSON data to CSV: ${error}`);
-  }
-}
-
-
-
-const uploadFile = (filename) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const conn = new client();
-      conn.on('ready', function () {
-        conn.sftp(function (err, sftp) {
-          if (err) throw err;
-          const readStream = fs.createReadStream(filename);
-          console.log("readStream==> ", readStream)
-          const writeStream = sftp.createWriteStream(`/incoming/${filename}`);
-          writeStream.on('close', function () {
-            console.log('File has been transferred successfully!');
-            conn.end();
-            resolve("connection ended")
-          });
-          readStream.pipe(writeStream);
-        });
-      }).connect({
-        host: process.env.SFTP_HOST,
-        port: process.env.SFTP_PORT,
-        username: process.env.SFTP_USERNAME,
-        password: process.env.SFTP_PASSWORD
-      });
-    } catch (error) {
-      console.log("Error:uploadFile", error)
-      reject(error)
-    }
-  })
 }
 
 async function sendAnEmail(data, filename) {
 
   let subject = `Weekly Service Report - ${new Date()}`;
 
-  console.log("subject", subject);
-
-  console.log("process.env.SMTP_FROM", process.env.SMTP_FROM);
-
   const sesParams = {
     from: process.env.SMTP_FROM,
-    // to: process.env.SMTP_TO,
-    to: `yogesh.barot@bizcloudexperts.com`,
+    to: process.env.SMTP_TO,
     subject: subject,
     text: `This is a weekly service report.`,
     attachments: [{

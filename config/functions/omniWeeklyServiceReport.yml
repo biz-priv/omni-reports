@@ -1,7 +1,7 @@
 ---
 function:
   name: omni-weekly-service-report-${self:provider.stage}
-  description: sending service reports every wednesday on 3AM MST
+  description: sending service reports every Friday on 9 AM CST
   handler: src/omniServiceReport/index.handler
   memorySize: 1024
   timeout: 90
@@ -18,7 +18,7 @@ function:
      - 'src/omniServiceReport/index.js'  
      - "src/shared/**"
   events:
-    - schedule: cron(0 23 ? * 3 *)
+    - schedule: cron(0 15 ? * 6 *)
   environment:
     DB_HOST: ${ssm:/omni-dw/${self:provider.stage}/db/host/url~true}
     DB_PORT: ${ssm:/omni-dw/${self:provider.stage}/db/port}

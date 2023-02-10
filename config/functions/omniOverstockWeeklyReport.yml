@@ -13,7 +13,7 @@ function:
      - 'src/omniOverstockReport/index.js'  
      - "src/shared/**"
   events:
-    - schedule: cron(0 23 ? * 3 *)
+    - schedule: cron(0 10 ? * 4 *)
   environment:
     DB_HOST: ${ssm:/omni-overstock-weekly-reports/${self:provider.stage}/db.host~true}
     DB_PORT: ${ssm:/omni-overstock-weekly-reports/${self:provider.stage}/db.port~true}
