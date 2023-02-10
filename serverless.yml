@@ -1,0 +1,42 @@
+service: omni-reports
+
+provider:
+  name: aws
+  region: ${opt:region, 'us-east-1'}
+  stage: ${opt:stage, 'dev'}
+  versionFunctions: false
+  tags: ${self:custom.tags}
+  stackTags: ${self:custom.tags}
+  role: ${ssm:/omni-dw/${self:provider.stage}/lambda/role}
+  vpc:
+    securityGroupIds:
+      - ${ssm:/omni-dw/${self:provider.stage}/lambda/sgId}
+    subnetIds:
+      - ${ssm:/omni-dw/${self:provider.stage}/lambda/subnetA}
+  runtime: nodejs14.x
+custom:
+  region: ${opt:region, 'us-east-1'}
+  stage: ${opt:stage, 'dev'}
+  tags:
+    Application: omni-reports
+    CreatedBy: Bizcloudexperts
+    Environment: ${self:custom.stage}
+
+plugins:
+ - serverless-offline
+
+package:
+  individually: true
+
+layers:
+  OmniReportsLayer:
+    path: lambdaLayer/lib
+    name: ${self:service}-layer-${self:provider.stage}
+    description: Omni reports lambda layer for all node modules - ${self:provider.stage}
+    compatibleRuntimes:
+      - nodejs14.x
+    retain: false
+
+functions:
+  omniOverstockWeeklyReport: ${file(config/functions/omniOverstockWeeklyReport.yml):function}
+  omniWeeklyServiceReport: ${file(config/functions/omniWeeklyServiceReport.yml):function}
