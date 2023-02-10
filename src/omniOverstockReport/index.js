@@ -50,7 +50,7 @@ async function fetchDataFromRedshift(omniOverstockWeeklyReportsSqlQuery) {
 async function convertToCSV(jreportsArray, filename) {
   try {
     const csv = json2csv(jreportsArray);
-    await fs.promises.writeFile(filename, csv);
+    await fs.promises.writeFile("/tmp/"+filename, csv);
     console.log(`JSON data successfully converted to CSV and saved at ${filename}`);
   } catch (error) {
     console.error(`Error converting JSON data to CSV: ${error}`);
@@ -66,7 +66,7 @@ const uploadFile = (filename) => {
       conn.on('ready', function () {
         conn.sftp(function (err, sftp) {
           if (err) throw err;
-          const readStream = fs.createReadStream(filename);
+          const readStream = fs.createReadStream("/tmp/"+filename);
           console.log("readStream==> ", readStream)
           const writeStream = sftp.createWriteStream(`/incoming/${filename}`);
           writeStream.on('close', function () {

@@ -75,14 +75,20 @@ async function fetchDataFromRedshift() {
 
     const { rows } = await client.query(query);
     await client.end();
-    
-    const filename = "OMNI_SERVICE_REPORT" + ".xlsx";
-
+    const filename = "WeeklyServiceReport" + ".xlsx";
     const workbook = new Excel.Workbook();
     let worksheet = workbook.addWorksheet('Sheet1');
 
+    worksheet.mergeCells('A1:D1');
+    worksheet.getCell('A1').value = 'Weekly Service Report';
+    worksheet.getCell('A1').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('A1').font = { size: 20, bold: true };
+    worksheet.mergeCells('A2:D2');
+    worksheet.getCell('A2').value = new Date().toISOString().substring(0, 10);
+    worksheet.getCell('A2').alignment = { vertical: 'middle', horizontal: 'center' };
+
     let fields = [
-      { header: 'Actual Departure Date - Y-M-D', key: 'actualdepartdate' }, 
+      { header: 'Actual Departure Date - Y-M-D', key: 'actualdepartdate' },
       { header: 'House Ref', key: 'houseref' },
       { header: 'Consignor Name', key: 'consignorname' },
       { header: 'Consignee Name', key: 'consigneename' },
@@ -101,7 +107,6 @@ async function fetchDataFromRedshift() {
     const buffer = await workbook.xlsx.writeBuffer();
 
     await sendAnEmail(buffer, filename);
-    
   }
   catch (error) {
     console.log("fetchDataFromRedshift:", error);
@@ -118,9 +123,9 @@ async function sendAnEmail(data, filename) {
     subject: subject,
     text: `This is a weekly service report.`,
     attachments: [{
-        filename: filename,
-        content: data,
-        contentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      filename: filename,
+      content: data,
+      contentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     }]
   };
   await sendEmail(sesParams);
