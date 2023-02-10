@@ -75,9 +75,7 @@ async function fetchDataFromRedshift() {
 
     const { rows } = await client.query(query);
     await client.end();
-
     const filename = "WeeklyServiceReport" + ".xlsx";
-
     const workbook = new Excel.Workbook();
     let worksheet = workbook.addWorksheet('Sheet1');
 
@@ -109,7 +107,6 @@ async function fetchDataFromRedshift() {
     const buffer = await workbook.xlsx.writeBuffer();
 
     await sendAnEmail(buffer, filename);
-
   }
   catch (error) {
     console.log("fetchDataFromRedshift:", error);
