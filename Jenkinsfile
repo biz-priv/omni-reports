@@ -18,6 +18,7 @@ pipeline {
                         env.ENVIRONMENT=env.getProperty("environment_stage")
                     } else if ("${GIT_BRANCH}".contains("master") || "${GIT_BRANCH}".contains("hotfix")){
                         env.ENVIRONMENT=env.getProperty("environment_prod")
+                    }
                     sh """
                     echo "Environment: "${env.ENVIRONMENT}
                     """
