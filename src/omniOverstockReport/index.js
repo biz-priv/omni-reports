@@ -1,11 +1,8 @@
 const { Client } = require('pg');
 const { omniOverstockWeeklyReportsSqlQuery } = require("../shared/omniOverstockWeeklyReportsQuery");
-const XLSX = require('xlsx');
 const json2csv = require('json2csv').parse;
 const fs = require('fs');
 const client = require('ssh2').Client;
-
-
 
 module.exports.handler = async () => {
   try {
@@ -15,8 +12,6 @@ module.exports.handler = async () => {
   }
   console.log("end of the code");
 };
-
-
 
 async function fetchDataFromRedshift(omniOverstockWeeklyReportsSqlQuery) {
   const client = new Client({
@@ -29,9 +24,7 @@ async function fetchDataFromRedshift(omniOverstockWeeklyReportsSqlQuery) {
   try {
     const query = omniOverstockWeeklyReportsSqlQuery
     await client.connect();
-
     const res = await client.query(query);
-
     console.log(res.rows[1]);
     const jreportsArray = res.rows
     const timestamp = new Date()
@@ -46,18 +39,15 @@ async function fetchDataFromRedshift(omniOverstockWeeklyReportsSqlQuery) {
   }
 }
 
-
 async function convertToCSV(jreportsArray, filename) {
   try {
     const csv = json2csv(jreportsArray);
-    await fs.promises.writeFile("/tmp/"+filename, csv);
+    await fs.promises.writeFile("/tmp/" + filename, csv);
     console.log(`JSON data successfully converted to CSV and saved at ${filename}`);
   } catch (error) {
     console.error(`Error converting JSON data to CSV: ${error}`);
   }
 }
-
-
 
 const uploadFile = (filename) => {
   return new Promise(async (resolve, reject) => {
@@ -66,7 +56,7 @@ const uploadFile = (filename) => {
       conn.on('ready', function () {
         conn.sftp(function (err, sftp) {
           if (err) throw err;
-          const readStream = fs.createReadStream("/tmp/"+filename);
+          const readStream = fs.createReadStream("/tmp/" + filename);
           console.log("readStream==> ", readStream)
           const writeStream = sftp.createWriteStream(`/incoming/${filename}`);
           writeStream.on('close', function () {
