@@ -1,0 +1,33 @@
+---
+function:
+  name: omni-weekly-service-report-${self:provider.stage}
+  description: sending service reports every Friday on 9 AM CST
+  handler: src/omniServiceReport/index.handler
+  memorySize: 1024
+  timeout: 90
+  vpc:
+    securityGroupIds:
+      - ${ssm:/omni-dw/${self:provider.stage}/lambda/sgId}
+    subnetIds:
+      - ${ssm:/omni-dw/${self:provider.stage}/lambda/subnetA}
+  layers:
+    - { Ref: OmniReportsLayerLambdaLayer }
+  package:
+    patterns:
+     - '!**/*'
+     - 'src/omniServiceReport/index.js'  
+     - "src/shared/**"
+  events:
+    - schedule: cron(0 15 ? * 6 *)
+  environment:
+    DB_HOST: ${ssm:/omni-dw/${self:provider.stage}/db/host/url~true}
+    DB_PORT: ${ssm:/omni-dw/${self:provider.stage}/db/port}
+    DB_USERNAME: ${ssm:/omni-dw/${self:provider.stage}/db/user~true}
+    DB_PASSWORD: ${ssm:/omni-dw/${self:provider.stage}/db/password~true}
+    DB_DATABASE: ${ssm:/omni-dw/${self:provider.stage}/db/name}
+    SMTP_HOST: ${ssm:/omni-dw/${self:provider.stage}/smtp/host}
+    SMTP_PORT: ${ssm:/omni-dw/${self:provider.stage}/smtp/port}
+    SMTP_USERNAME: ${ssm:/omni-dw/${self:provider.stage}/smtp/user}
+    SMTP_PASSWORD: ${ssm:/omni-dw/${self:provider.stage}/smtp/password}
+    SMTP_FROM: ${ssm:/omni-dw/${self:provider.stage}/smtp/sender}
+    SMTP_TO: ${ssm:/omni-reports/${self:provider.stage}/weekly-service-report/smtp/receiver}
