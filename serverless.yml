@@ -40,4 +40,4 @@ layers:
 functions:
   omniOverstockWeeklyReport: ${file(config/functions/omniOverstockWeeklyReport.yml):function}
   omniWeeklyServiceReport: ${file(config/functions/omniWeeklyServiceReport.yml):function} 
-  hydraFacialReport: ${file(config/hydraFacialReport.yml)}
+  hydraFacialReport: ${file(config/functions/hydraFacialReport.yml):function}

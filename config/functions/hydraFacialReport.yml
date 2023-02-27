@@ -1,10 +1,11 @@
-CustomReportForHydraFacial:
-  handler: src/hydraFacialReport/index.handler
+---
+function:
   name: omni-hydrafacial-report-${self:provider.stage}
-  timeout: 30
-  memorySize: 512
+  handler: src/hydraFacialReport/index.handler
+  memorySize: 1024
+  timeout: 90
   layers:
-    - { Ref: CommonLibsLambdaLayer } 
+    - { Ref: OmniReportsLayerLambdaLayer }
   environment:
     DEFAULT_AWS: ${self:provider.region}
     DB_PORT: ${ssm:/omni-dw/prod/db/port}
