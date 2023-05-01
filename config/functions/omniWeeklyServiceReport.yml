@@ -31,4 +31,4 @@ function:
     SMTP_PASSWORD: ${ssm:/omni-dw/${self:provider.stage}/smtp/password}
     SMTP_FROM: ${ssm:/omni-dw/${self:provider.stage}/smtp/sender}
     SMTP_TO: ${ssm:/omni-reports/${self:provider.stage}/weekly-service-report/smtp/receiver}
-    S3_BUCKET_NAME: ${ssm:/omni-weekly-service-report/${self:provider.stage}/s3_bucket_name} 
+    S3_BUCKET_NAME: ${ssm:/omni-weekly-service-report/${self:provider.stage}/s3_bucket_name}
