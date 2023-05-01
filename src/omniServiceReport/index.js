@@ -1,3 +1,5 @@
+const AWS = require("aws-sdk");
+const s3 = new AWS.S3();
 const { Client } = require('pg');
 const Excel = require('exceljs');
 const { omniWeeklyServiceReportSqlQuery } = require("../shared/omniWeeklyServiceReportSqlQuery");
@@ -26,7 +28,8 @@ async function fetchDataFromRedshift() {
 
     const { rows } = await client.query(omniWeeklyServiceReportSqlQuery);
     await client.end();
-    const filename = "WeeklyServiceReport" + ".xlsx";
+    const timestamp = new Date()
+    const filename = "WeeklyServiceReport_" + timestamp.toISOString().substring(5, 10) + '-' + timestamp.toISOString().substring(0, 4) +  ".xlsx";
     const workbook = new Excel.Workbook();
     let worksheet = workbook.addWorksheet('Sheet1');
 
@@ -50,6 +53,7 @@ async function fetchDataFromRedshift() {
     const buffer = await workbook.xlsx.writeBuffer();
 
     await sendAnEmail(buffer, filename);
+    await uploadFileToS3(buffer, filename);
   }
   catch (error) {
     console.log("fetchDataFromRedshift:", error);
@@ -72,4 +76,18 @@ async function sendAnEmail(data, filename) {
     }]
   };
   await sendEmail(sesParams);
+}
+
+const uploadFileToS3 = async (buffer,filename) => {
+  console.log("uploadFileToS3")
+  try {
+    await s3.upload({
+      Bucket: process.env.S3_BUCKET_NAME,
+      Key: filename,
+      Body: buffer ,
+      ContentType: "application/vnd.ms-excel",
+    }).promise();
+  } catch (error) {
+    console.log("error",error)
+  }
 }

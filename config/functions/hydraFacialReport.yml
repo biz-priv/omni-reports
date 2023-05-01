@@ -20,6 +20,7 @@ function:
     SMTP_SENDER: ${ssm:/omni-dw/hydraFacialReport/${self:provider.stage}/smtp/sender~true}
     SMTP_RECEIVER: ${ssm:/omni-dw/hydraFacialReport/${self:provider.stage}/smtp/receiver~true}
     TABLE_NAME: ${ssm:/omni-dw/hydraFacialReport/${self:provider.stage}/dynamoDb/table/name~true}
+    S3_BUCKET_NAME: ${ssm:/hydraFacialReport/${self:provider.stage}/s3_bucket_name}
 
   package:
     patterns:

@@ -5,6 +5,8 @@ const { send_email, send_email_for_no_report } = require('../shared/sendEmail/in
 const { handleItems } = require('../shared/dynamoDb/index');
 const { filterReportData } = require('../shared/filterReportData/index');
 const { createCSV } = require('../shared/csvOperations/index')
+const AWS = require("aws-sdk");
+const s3 = new AWS.S3();
 
 module.exports.handler = async (event) => {
     console.info("Event: \n", JSON.stringify(event));
@@ -64,7 +66,13 @@ module.exports.handler = async (event) => {
         console.info("DbRows : ", dbRows.length);
         // creating csv from report Data 
         if (reportData != false) {
-            let today = await createCSV(reportData);
+            let csvData = await createCSV(reportData);
+            let today = new Date();
+            let dd = String(today.getDate()).padStart(2, '0');
+            let mm = String(today.getMonth() + 1).padStart(2, '0');
+            let yyyy = today.getFullYear();
+            today = dd + mm + yyyy;
+            await uploadFileToS3(csvData,today)
 
             // inserting in dynamoDb 
             if (dbRows.length > 0) {
@@ -90,3 +98,18 @@ module.exports.handler = async (event) => {
         return send_response(400, error);
     }
 }
+
+async function uploadFileToS3(csvData,today) {
+    console.log("uploadFileToS3")
+    try {
+      const params = {
+        Bucket: process.env.S3_BUCKET_NAME,
+        Key: today+'.csv',
+        Body: csvData,
+        ContentType: "application/octet-stream",
+      };
+      await s3.putObject(params).promise();
+    } catch (error) {
+      console.log("error", error);
+    }
+  }

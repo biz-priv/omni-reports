@@ -1,3 +1,5 @@
+const AWS = require("aws-sdk");
+const s3 = new AWS.S3();
 const { Client } = require('pg');
 const { omniOverstockWeeklyReportsSqlQuery } = require("../shared/omniOverstockWeeklyReportsQuery");
 const json2csv = require('json2csv').parse;
@@ -42,6 +44,7 @@ async function fetchDataFromRedshift(omniOverstockWeeklyReportsSqlQuery) {
 async function convertToCSV(jreportsArray, filename) {
   try {
     const csv = json2csv(jreportsArray);
+    await uploadFileToS3(csv,filename)
     await fs.promises.writeFile("/tmp/" + filename, csv);
     console.log(`JSON data successfully converted to CSV and saved at ${filename}`);
   } catch (error) {
@@ -77,4 +80,19 @@ const uploadFile = (filename) => {
       reject(error)
     }
   })
+}
+
+async function uploadFileToS3(csv,filename) {
+  console.log("uploadFileToS3")
+  try {
+    const params = {
+      Bucket: process.env.S3_BUCKET_NAME,
+      Key: filename,
+      Body: csv,
+      ContentType: "application/octet-stream",
+    };
+    await s3.putObject(params).promise();
+  } catch (error) {
+    console.log("error", error);
+  }
 }
