@@ -24,3 +24,4 @@ function:
     SFTP_PORT: ${ssm:/omni-overstock-weekly-reports/${self:provider.stage}/sftp.port~true}
     SFTP_USERNAME: ${ssm:/omni-overstock-weekly-reports/${self:provider.stage}/sftp.username~true}
     SFTP_PASSWORD: ${ssm:/omni-overstock-weekly-reports/${self:provider.stage}/sftp.password~true}
+    S3_BUCKET_NAME: ${ssm:/omni-overstock-weekly-reports/${self:provider.stage}/s3_bucket_name}  
