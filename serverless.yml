@@ -41,3 +41,4 @@ functions:
   omniOverstockWeeklyReport: ${file(config/functions/omniOverstockWeeklyReport.yml):function}
   omniWeeklyServiceReport: ${file(config/functions/omniWeeklyServiceReport.yml):function} 
   hydraFacialReport: ${file(config/functions/hydraFacialReport.yml):function}
+  mcleodFinanceReports: ${file(config/functions/mcleodFinanceReports.yml):function}
