@@ -6,19 +6,47 @@ const { filterReportData } = require('../shared/filterReportData/index');
 const { createCSV } = require('../shared/csvOperations/index')
 const AWS = require("aws-sdk");
 const s3 = new AWS.S3();
+const {mcleodArCmApplyCm}= require('../shared/query/mcleodArCmApplyCm')
+const {mcleodArCmHeader}= require('../shared/query/mcleodArCmHeader')
+const {mcleodArCmLine}= require('../shared/query/mcleodArCmLine')
+const {mcleodArInvoice}= require('../shared/query/mcleodArInvoice')
 
 module.exports.handler = async (event) => {
     console.info("Event: \n", JSON.stringify(event));
-    async () => {
-        try {
-            await sql.connect(sqlConfig)
-            const result = await sql.query`select top 5 * from other_charge_hist`
-            console.dir(result)
-        } catch (err) {
-            // ... error checks
-        }
+    try{
+    const queries =[mcleodArCmApplyCm,mcleodArCmHeader,mcleodArCmLine,mcleodArInvoice]
+    for (let index = 0; index < queries.length; index++) {
+        const element = queries[index];
+        console.log(element)
+        const queryData = await connectionToSql(element)
+        console.log("queryData",queryData)
+        const csv = await createCSV(queryData)
+        console.log("csv",csv)
+        
+    }
+    }catch(error){
+        console.log("error",error)
+    }
+
+   
+}
+
+
+async function connectionToSql(query){
+    try {
+        await sql.connect(sqlConfig)
+        const result = await sql.query(query)
+        console.log("result",result)
+        return result;
+
+    } catch (err) {
+        console.log("connectionToSql:error",err)
     }
 }
+
+
+
+
 
 async function uploadFileToS3(csvData, today) {
     console.log("uploadFileToS3")
