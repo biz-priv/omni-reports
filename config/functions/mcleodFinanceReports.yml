@@ -31,4 +31,4 @@ function:
     subnetIds:
       - ${ssm:/omni-mcleod/${self:provider.stage}/subnet_id}
   events:
-    - schedule: cron(0 23 * * *)
+    - schedule: cron(0 23 * * ? *)
