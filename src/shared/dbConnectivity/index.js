@@ -10,10 +10,10 @@ const client = new pg.Pool({
 });
 
 const sqlConfig = {
-    user: 'omnidbadmin',
-    password: 'ECTKkjJGJYguAvA7wvKGAqrbqNx577',
-    database: 'lme_uat',
-    server: 'mcleod-serverfarm-master-uat-mcleoddb-jqpx0dca96va.ckzqjxhguxlx.us-east-1.rds.amazonaws.com',
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE,
+    server: process.env.DB_HOST,
     pool: {
         max: 10,
         min: 0,
