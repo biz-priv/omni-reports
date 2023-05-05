@@ -1,7 +1,7 @@
 const AWS = require("aws-sdk");
 const s3 = new AWS.S3();
 const { Client } = require('pg');
-const { omniOverstockWeeklyReportsSqlQuery } = require("../shared/omniOverstockWeeklyReportsQuery");
+const { omniOverstockWeeklyReportsSqlQuery } = require("../shared/query/omniOverstockWeeklyReportsQuery");
 const json2csv = require('json2csv').parse;
 const fs = require('fs');
 const client = require('ssh2').Client;
