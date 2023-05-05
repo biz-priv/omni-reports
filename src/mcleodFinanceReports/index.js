@@ -44,7 +44,7 @@ module.exports.handler = async (event) => {
         await send_email(transporter, reports)
         return send_response(200);
     } catch (error) {
-        cconsole.error("Error : \n", error);
+        console.error("Error : \n", error);
         return send_response(400, error);
     }
 }
@@ -88,9 +88,8 @@ async function send_email(transporter, reports) {
         transporter.sendMail(
             {
                 from: process.env.SMTP_SENDER,
-                to : process.env.SMTP_SENDER,
-                //to: "abdul.rashed@bizcloudexperts.com",
-                subject: process.env.STAGE + "-Omni-mcleod Finance reports",
+                to: process.env.SMTP_SENDER,
+                subject: "Finance reports-" + process.env.STAGE,
                 text: "Please check the attachment for report",
                 html: "<b>Please check the attachment for report</b>",
                 attachments: attachments
