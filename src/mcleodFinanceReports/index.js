@@ -15,24 +15,19 @@ module.exports.handler = async (event) => {
     try {
 
         const timestamp = new Date()
-        const date = timestamp.toISOString().substring(5, 10) + '-' + timestamp.toISOString().substring(0, 4) + '.csv'
-        const queries = [{ filename: "Mcleod_AR_CM_Apply_" + date, query: mcleodArCmApplyCm },
-        { filename: "Mcleod_AR_CM_Header_" + date, query: mcleodArCmHeader },
-        { filename: "Mcleod_AR_CM_Line_" + date, query: mcleodArCmLine },
-        { filename: "Mcleod_AR_Invoice_" + date, query: mcleodArInvoice }]
+        const dateWithFileFormat = timestamp.toISOString().substring(5, 10) + '-' + timestamp.toISOString().substring(0, 4) + '.csv'
+        const queries = [{ filename: "Mcleod_AR_CM_Apply_" + dateWithFileFormat, query: mcleodArCmApplyCm },
+        { filename: "Mcleod_AR_CM_Header_" + dateWithFileFormat, query: mcleodArCmHeader },
+        { filename: "Mcleod_AR_CM_Line_" + dateWithFileFormat, query: mcleodArCmLine },
+        { filename: "Mcleod_AR_Invoice_" + dateWithFileFormat, query: mcleodArInvoice }]
         const reports = [];
         for (let index = 0; index < queries.length; index++) {
             const element = queries[index];
-            console.log("element.filename", element.filename)
-            console.log("element.query", element.query)
             const query = element.query
             const filename = element.filename
-
-
             const queryData = await connectionToSql(query)
             console.log("queryData", queryData)
             const data = queryData.recordset
-            console.log("data", data)
             if (!data || data.length == 0) {
                 continue;
             };
@@ -40,11 +35,8 @@ module.exports.handler = async (event) => {
              * create csv
              */
             const fields = Object.keys(data[0]);
-            console.log("fields", fields)
             const opts = { fields };
-            console.log("opts", opts)
             const csv = parse(data, opts);
-            console.log("csv", csv)
             await uploadFileToS3(csv, filename)
             reports.push({ filename, content: csv });
         }
@@ -64,7 +56,6 @@ async function connectionToSql(query) {
         const result = await sql.query(query)
         console.log("result", result)
         return result;
-
     } catch (err) {
         console.log("connectionToSql:error", err)
     }
