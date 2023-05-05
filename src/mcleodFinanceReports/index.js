@@ -88,8 +88,8 @@ async function send_email(transporter, reports) {
         transporter.sendMail(
             {
                 from: process.env.SMTP_SENDER,
-                //to : process.env.SMTP_SENDER,
-                to: "abdul.rashed@bizcloudexperts.com",
+                to : process.env.SMTP_SENDER,
+                //to: "abdul.rashed@bizcloudexperts.com",
                 subject: process.env.STAGE + "-Omni-mcleod Finance reports",
                 text: "Please check the attachment for report",
                 html: "<b>Please check the attachment for report</b>",
