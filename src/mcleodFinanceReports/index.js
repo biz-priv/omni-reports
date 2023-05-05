@@ -13,7 +13,6 @@ const { parse } = require("json2csv");
 module.exports.handler = async (event) => {
     console.info("Event: \n", JSON.stringify(event));
     try {
-
         const timestamp = new Date()
         const dateWithFileFormat = timestamp.toISOString().substring(5, 10) + '-' + timestamp.toISOString().substring(0, 4) + '.csv'
         const queries = [{ filename: "Mcleod_AR_CM_Apply_" + dateWithFileFormat, query: mcleodArCmApplyCm },
@@ -26,7 +25,6 @@ module.exports.handler = async (event) => {
             const query = element.query
             const filename = element.filename
             const queryData = await connectionToSql(query)
-            console.log("queryData", queryData)
             const data = queryData.recordset
             if (!data || data.length == 0) {
                 continue;
@@ -54,7 +52,6 @@ async function connectionToSql(query) {
     try {
         await sql.connect(sqlConfig)
         const result = await sql.query(query)
-        console.log("result", result)
         return result;
     } catch (err) {
         console.log("connectionToSql:error", err)
