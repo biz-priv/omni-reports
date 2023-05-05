@@ -89,7 +89,7 @@ async function send_email(transporter, reports) {
             {
                 from: process.env.SMTP_SENDER,
                 to: process.env.SMTP_SENDER,
-                subject: "Finance reports-" + process.env.STAGE,
+                subject: "Finance Reports-" + process.env.STAGE,
                 text: "Please check the attachment for report",
                 html: "<b>Please check the attachment for report</b>",
                 attachments: attachments
