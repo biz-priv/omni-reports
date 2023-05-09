@@ -24,8 +24,10 @@ module.exports.handler = async (event) => {
             const element = queries[index];
             const query = element.query
             const filename = element.filename
+            console.log("filename",filename)
             const queryData = await connectionToSql(query)
             const data = queryData.recordset
+            console.log("data",data)
             if (!data || data.length == 0) {
                 continue;
             };
@@ -38,8 +40,9 @@ module.exports.handler = async (event) => {
             await uploadFileToS3(csv, filename)
             reports.push({ filename, content: csv });
         }
-
+        if (reports.length!=0){
         await send_email(transporter, reports)
+        }
         return send_response(200);
     } catch (error) {
         console.error("Error : \n", error);
@@ -86,6 +89,7 @@ async function send_email(transporter, reports) {
             {
                 from: process.env.SMTP_SENDER,
                 to: process.env.SMTP_SENDER,
+                //to:"abdul.rashed@bizcloudexperts.com",
                 subject: "Finance Reports-" + process.env.STAGE,
                 text: "Please check the attachment for report",
                 html: "<b>Please check the attachment for report</b>",

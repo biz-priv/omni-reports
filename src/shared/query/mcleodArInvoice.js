@@ -8,7 +8,9 @@ END                              AS "External ID",
 Cast(base.transfer_date AS DATE) AS Date,
 case 
 o.customer_id when 'SEKO' then '010100005'
-when 'PLC' then 'PLCLAX' else o.customer_id end 
+when 'PLC' then 'PLCLAX' 
+when 'MACH1LIN' then 'MACH1CORP'
+else o.customer_id end 
 AS Customer,
 CASE
 WHEN base.charge_type = 'linehaul' THEN o.id
@@ -36,6 +38,22 @@ WHEN base.charge_type = 'other_charge'
      AND och.charge_id = 'HNDL' THEN '910'
 ELSE ''
 END                              AS "Item Internal ID",
+CASE
+WHEN base.charge_type = 'linehaul' THEN 'LINEHAUL CHARGE'
+WHEN base.charge_type = 'other_charge'
+     AND och.charge_id = 'FSC' THEN 'FUEL SURCHARGE'
+WHEN base.charge_type = 'other_charge'
+     AND och.charge_id = 'FUEL' THEN 'FUEL SURCHARGE'
+WHEN base.charge_type = 'other_charge'
+     AND och.charge_id = 'DET' THEN 'DETENTION CHARGES'
+WHEN base.charge_type = 'other_charge'
+     AND och.charge_id = 'FRE' THEN 'FREIGHT CHARGES'
+WHEN base.charge_type = 'other_charge'
+     AND och.charge_id = 'HD' THEN 'HANDLING CHARGE'
+WHEN base.charge_type = 'other_charge'
+     AND och.charge_id = 'HNDL' THEN 'HANDLING CHARGE'
+ELSE ''
+END                              AS "Description - Line",
 CASE
 WHEN base.charge_type = 'linehaul' THEN bh.linehaul_chg
 WHEN base.charge_type = 'other_charge' THEN och.amount
@@ -100,7 +118,7 @@ WHERE  ( CASE
   WHEN base.charge_type = 'other_charge' THEN base.invoice_no_string
   ELSE ''
 END ) IS NOT NULL 
-and  base.transfer_date >= dateadd(hour, -24, getdate())
-and base.bill_type = 'I'`
+  and  base.transfer_date >= dateadd(hour, -24, getdate())
+  and base.bill_type = 'I'`
 
 module.exports = { mcleodArInvoice }
