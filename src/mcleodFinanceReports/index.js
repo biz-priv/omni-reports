@@ -45,7 +45,7 @@ module.exports.handler = async (event) => {
         return send_response(200);
     } catch (error) {
         console.error("Error : \n", error);
-        return send_response(400, error);
+        return send_response(400, error); 
     }
 }
 
