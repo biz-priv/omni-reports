@@ -27,7 +27,6 @@ module.exports.handler = async (event) => {
             console.log("filename",filename)
             const queryData = await connectionToSql(query)
             const data = queryData.recordset
-            console.log("data",data)
             if (!data || data.length == 0) {
                 continue;
             };
