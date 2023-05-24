@@ -8,11 +8,11 @@ function:
     - { Ref: OmniReportsLayerLambdaLayer }
   environment:
     DEFAULT_AWS: ${self:provider.region}
-    DB_PORT: ${ssm:/omni-dw/prod/db/port}
-    DB_HOST: ${ssm:/omni-dw/prod/db/host~true}
-    DB_PASSWORD: ${ssm:/omni-dw/prod/db/password~true}   
-    DB_DATABASE: ${ssm:/omni-dw/prod/db/name~true}
-    DB_USER: ${ssm:/omni-dw/prod/db/user~true}
+    DB_PORT: ${ssm:/omni-dw/${self:provider.stage}/db/port}
+    DB_HOST: ${ssm:/omni-dw/${self:provider.stage}/db/host~true}
+    DB_PASSWORD: ${ssm:/omni-dw/${self:provider.stage}/db/password~true}   
+    DB_DATABASE: ${ssm:/omni-dw/${self:provider.stage}/db/name~true}
+    DB_USER: ${ssm:/omni-dw/${self:provider.stage}/db/user~true}
     SMTP_HOST: ${ssm:/omni-dw/hydraFacialReport/${self:provider.stage}/smtp/host~true}
     SMTP_PORT: ${ssm:/omni-dw/hydraFacialReport/${self:provider.stage}/smtp/port~true}
     SMTP_USER: ${ssm:/omni-dw/hydraFacialReport/${self:provider.stage}/smtp/user~true}
