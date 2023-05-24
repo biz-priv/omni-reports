@@ -2,7 +2,7 @@ const AWS = require("aws-sdk");
 const s3 = new AWS.S3();
 const { Client } = require('pg');
 const Excel = require('exceljs');
-const { omniWeeklyServiceReportSqlQuery } = require("../shared/omniWeeklyServiceReportSqlQuery");
+const { omniWeeklyServiceReportSqlQuery } = require("../shared/query/omniWeeklyServiceReportSqlQuery");
 const { sendEmail } = require('../shared/ses');
 
 module.exports.handler = async () => {

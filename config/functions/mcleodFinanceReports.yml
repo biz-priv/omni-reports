@@ -1,0 +1,34 @@
+---
+function:
+  name: omni-mcleod-finance-reports-${self:provider.stage}
+  handler: src/mcleodFinanceReports/index.handler
+  memorySize: 1024
+  timeout: 90
+  layers:
+    - { Ref: OmniReportsLayerLambdaLayer }
+  environment:
+    DEFAULT_AWS: ${self:provider.region}
+    STAGE: ${self:provider.stage}
+    DB_HOST: ${ssm:/omni-mcleod/${self:provider.stage}/db.server~true}
+    DB_PASSWORD: ${ssm:/omni-mcleod/${self:provider.stage}/db.password~true}  
+    DB_DATABASE: ${ssm:/omni-mcleod/${self:provider.stage}/db.database~true}
+    DB_USER: ${ssm:/omni-mcleod/${self:provider.stage}/db.user~true}
+    SMTP_HOST: ${ssm:/omni-dw/hydraFacialReport/${self:provider.stage}/smtp/host~true}
+    SMTP_PORT: ${ssm:/omni-dw/hydraFacialReport/${self:provider.stage}/smtp/port~true}
+    SMTP_USER: ${ssm:/omni-dw/hydraFacialReport/${self:provider.stage}/smtp/user~true}
+    SMTP_PASSWORD: ${ssm:/omni-dw/hydraFacialReport/${self:provider.stage}/smtp/password~true}
+    SMTP_SENDER: ${ssm:/omni-dw/hydraFacialReport/${self:provider.stage}/smtp/sender~true}
+    SMTP_RECEIVER: ${ssm:/omni-mcleod/${self:provider.stage}/smtp/receiver}
+    S3_BUCKET_NAME: ${ssm:/omni-mcleod/${self:provider.stage}/s3_bucket_name}
+  package:
+    patterns:
+      - '!**/*'
+      - 'src/mcleodFinanceReports/**'
+      - 'src/shared/**'
+  vpc:
+    securityGroupIds:
+      - ${ssm:/omni-mcleod/${self:provider.stage}/security_groupId}
+    subnetIds:
+      - ${ssm:/omni-mcleod/${self:provider.stage}/subnet_id}
+  events:
+    - schedule: cron(0 23 * * ? *)
