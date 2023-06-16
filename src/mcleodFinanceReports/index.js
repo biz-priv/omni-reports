@@ -45,7 +45,7 @@ module.exports.handler = async (event) => {
         return send_response(200);
     } catch (error) {
         console.error("Error : \n", error);
-        return send_response(400, error);
+        return send_response(400, error); 
     }
 }
 
@@ -87,7 +87,7 @@ async function send_email(transporter, reports) {
         transporter.sendMail(
             {
                 from: process.env.SMTP_SENDER,
-                to: process.env.SMTP_SENDER,
+                to: process.env.SMTP_RECEIVER,
                 //to:"abdul.rashed@bizcloudexperts.com,ashish.akshantal@bizcloudexperts.com",
                 subject: "Finance Reports-" + process.env.STAGE,
                 text: "Please check the attachment for report",
