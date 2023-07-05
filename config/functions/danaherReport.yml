@@ -20,10 +20,10 @@ function:
     DB_PASSWORD: ${ssm:/omni-dw/${self:provider.stage}/db/password~true}
     DB_DATABASE: ${ssm:/omni-dw/${self:provider.stage}/db/name~true}
     DB_USER: ${ssm:/omni-dw/${self:provider.stage}/db/user~true}
-    SFTP_HOST: ${ssm:/omni-danaher-monthly-reports/${self:provider.stage}/sftp.host}
-    SFTP_PORT: ${ssm:/omni-danaher-monthly-reports/${self:provider.stage}/sftp.port}
-    SFTP_USERNAME: ${ssm:/omni-danaher-monthly-reports/${self:provider.stage}/sftp.username} 
-    SFTP_PASSWORD: ${ssm:/omni-danaher-monthly-reports/${self:provider.stage}/sftp.password}
+    SFTP_HOST: ${ssm:/omni-danaher-monthly-reports/${self:provider.stage}/sftp.host~true}
+    SFTP_PORT: ${ssm:/omni-danaher-monthly-reports/${self:provider.stage}/sftp.port~true}
+    SFTP_USERNAME: ${ssm:/omni-danaher-monthly-reports/${self:provider.stage}/sftp.username~true} 
+    SFTP_PASSWORD: ${ssm:/omni-danaher-monthly-reports/${self:provider.stage}/sftp.password~true}
     ERROR_SNS_ARN: ${ssm:/omni-reports/${self:provider.stage}/error-notification/sns/arn}
     FUNCTION_NAME: omni-danaher-monthly-reports-${self:provider.stage}
     #using the test bucket only for development as the bucket name is not at fixed.
