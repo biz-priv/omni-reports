@@ -1,7 +1,7 @@
 ---
 function:
   name: omni-danaher-monthly-reports-${self:provider.stage}
-  description: sending overstock reports every wednesday on 3AM MST
+  description: sending danaher reports every month on 9AM CST
   handler: src/danaherMonthlyReport/index.handler
   memorySize: 1024
   timeout: 90
@@ -13,7 +13,7 @@ function:
      - 'src/danaherMonthlyReport/index.js'  
      - "src/shared/**"
   events:
-    - schedule: cron(0 10 ? * 4 *)
+    - schedule: cron(0 15 1 * ? *)
   environment:
     DB_PORT: ${ssm:/omni-dw/${self:provider.stage}/db/port}
     DB_HOST: ${ssm:/omni-dw/${self:provider.stage}/db/host~true}
