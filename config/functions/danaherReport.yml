@@ -17,7 +17,7 @@ function:
   environment:
     DB_PORT: ${ssm:/omni-dw/${self:provider.stage}/db/port}
     DB_HOST: ${ssm:/omni-dw/${self:provider.stage}/db/host~true}
-    DB_PASSWORD: ${ssm:/omni-dw/${self:provider.stage}/db/password~true}
+    DB_PASSWORD: ${ssm:/omni-dw/${self:provider.stage}/db/password.unparsed~true}
     DB_DATABASE: ${ssm:/omni-dw/${self:provider.stage}/db/name~true}
     DB_USER: ${ssm:/omni-dw/${self:provider.stage}/db/user~true}
     SFTP_HOST: ${ssm:/omni-danaher-monthly-reports/${self:provider.stage}/sftp.host~true}
