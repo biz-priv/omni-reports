@@ -21,6 +21,8 @@ function:
     SMTP_RECEIVER: ${ssm:/omni-dw/hydraFacialReport/${self:provider.stage}/smtp/receiver~true}
     TABLE_NAME: ${ssm:/omni-dw/hydraFacialReport/${self:provider.stage}/dynamoDb/table/name~true}
     S3_BUCKET_NAME: ${ssm:/hydraFacialReport/${self:provider.stage}/s3_bucket_name}
+    ERROR_SNS_ARN: ${ssm:/omni-reports/${self:provider.stage}/error-notification/sns/arn}
+    FUNCTION_NAME: omni-hydrafacial-report-${self:provider.stage}
 
   package:
     patterns:

@@ -4,12 +4,18 @@ const { Client } = require('pg');
 const Excel = require('exceljs');
 const { omniWeeklyServiceReportSqlQuery } = require("../shared/query/omniWeeklyServiceReportSqlQuery");
 const { sendEmail } = require('../shared/ses');
-
+const sns = new AWS.SNS({ apiVersion: '2010-03-31' });
 module.exports.handler = async () => {
   try {
     await fetchDataFromRedshift();
   } catch (err) {
     console.log("handler:error", err);
+    const params = {
+      Message: `An error occurred in function ${process.env.FUNCTION_NAME}. Error details: ${err}.`,
+      Subject: `Lambda function ${process.env.FUNCTION_NAME} have failed.`,
+      TopicArn: process.env.ERROR_SNS_ARN,
+    };
+    await sns.publish(params).promise();
   }
   console.log("end of the code");
 };

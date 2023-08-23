@@ -32,3 +32,5 @@ function:
     SMTP_FROM: ${ssm:/omni-dw/${self:provider.stage}/smtp/sender}
     SMTP_TO: ${ssm:/omni-reports/${self:provider.stage}/weekly-service-report/smtp/receiver} 
     S3_BUCKET_NAME: ${ssm:/omni-weekly-service-report/${self:provider.stage}/s3_bucket_name}
+    ERROR_SNS_ARN: ${ssm:/omni-reports/${self:provider.stage}/error-notification/sns/arn}
+    FUNCTION_NAME: omni-weekly-service-report-${self:provider.stage}    

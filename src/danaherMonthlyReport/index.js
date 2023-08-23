@@ -20,7 +20,7 @@ module.exports.handler = async () => {
     const opts = { fields };
     console.log("opts:", opts);
     const csv = parse(redShiftData, opts);
-    const result = await sendFile(csv, filename)
+    await sendFile(csv, filename)
     await uploadFileToS3(filename, csv)
   } catch (err) {
     console.log("handler:error", err);

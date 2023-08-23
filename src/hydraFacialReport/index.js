@@ -7,6 +7,7 @@ const { filterReportData } = require('../shared/filterReportData/index');
 const { createCSV } = require('../shared/csvOperations/index')
 const AWS = require("aws-sdk");
 const s3 = new AWS.S3();
+const sns = new AWS.SNS({ apiVersion: '2010-03-31' });
 
 module.exports.handler = async (event) => {
     console.info("Event: \n", JSON.stringify(event));
@@ -95,6 +96,12 @@ module.exports.handler = async (event) => {
         return send_response(200);
     } catch (error) {
         console.error("Error : \n", error);
+        const params = {
+            Message: `An error occurred in function ${process.env.FUNCTION_NAME}. Error details: ${error}.`,
+            Subject: `Lambda function ${process.env.FUNCTION_NAME} have failed.`,
+            TopicArn: process.env.ERROR_SNS_ARN,
+          };
+        await sns.publish(params).promise();  
         return send_response(400, error);
     }
 }
