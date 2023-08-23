@@ -18,7 +18,7 @@ function:
     DB_HOST: ${ssm:/omni-overstock-weekly-reports/${self:provider.stage}/db.host~true}
     DB_PORT: ${ssm:/omni-overstock-weekly-reports/${self:provider.stage}/db.port~true}
     DB_USERNAME: ${ssm:/omni-overstock-weekly-reports/${self:provider.stage}/db.username~true}
-    DB_PASSWORD: ${ssm:/omni-overstock-weekly-reports/${self:provider.stage}/db.password~true}
+    DB_PASSWORD: ${ssm:/omni-dw/${self:provider.stage}/db/password.unparsed~true}
     DB_DATABASE: ${ssm:/omni-overstock-weekly-reports/${self:provider.stage}/db.database~true}
     SFTP_HOST: ${ssm:/omni-overstock-weekly-reports/${self:provider.stage}/sftp.host~true}
     SFTP_PORT: ${ssm:/omni-overstock-weekly-reports/${self:provider.stage}/sftp.port~true}
