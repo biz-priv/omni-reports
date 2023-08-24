@@ -1,0 +1,30 @@
+---
+function:
+  name: omni-danaher-monthly-reports-${self:provider.stage}
+  description: sending danaher reports every month on 9AM CST
+  handler: src/danaherMonthlyReport/index.handler
+  memorySize: 1024
+  timeout: 90
+  layers:
+    - { Ref: OmniReportsLayerLambdaLayer }
+  package:
+    patterns:
+     - '!**/*'
+     - 'src/danaherMonthlyReport/index.js'  
+     - "src/shared/**"
+  events:
+    - schedule: cron(0 15 1 * ? *)
+  environment:
+    DB_PORT: ${ssm:/omni-dw/${self:provider.stage}/db/port}
+    DB_HOST: ${ssm:/omni-dw/${self:provider.stage}/db/host~true}
+    DB_PASSWORD: ${ssm:/omni-dw/${self:provider.stage}/db/password.unparsed~true}
+    DB_DATABASE: ${ssm:/omni-dw/${self:provider.stage}/db/name~true}
+    DB_USER: ${ssm:/omni-dw/${self:provider.stage}/db/user~true}
+    SFTP_HOST: ${ssm:/omni-danaher-monthly-reports/${self:provider.stage}/sftp.host~true}
+    SFTP_PORT: ${ssm:/omni-danaher-monthly-reports/${self:provider.stage}/sftp.port~true}
+    SFTP_USERNAME: ${ssm:/omni-danaher-monthly-reports/${self:provider.stage}/sftp.username~true} 
+    SFTP_PASSWORD: ${ssm:/omni-danaher-monthly-reports/${self:provider.stage}/sftp.password~true}
+    ERROR_SNS_ARN: ${ssm:/omni-reports/${self:provider.stage}/error-notification/sns/arn}
+    FUNCTION_NAME: omni-danaher-monthly-reports-${self:provider.stage}
+    S3_BUCKET_NAME: ${ssm:/omni-danaher-monthly-reports/${self:provider.stage}/s3_bucket_name} 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 

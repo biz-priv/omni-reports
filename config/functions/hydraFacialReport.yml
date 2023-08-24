@@ -10,7 +10,7 @@ function:
     DEFAULT_AWS: ${self:provider.region}
     DB_PORT: ${ssm:/omni-dw/${self:provider.stage}/db/port}
     DB_HOST: ${ssm:/omni-dw/${self:provider.stage}/db/host~true}
-    DB_PASSWORD: ${ssm:/omni-dw/${self:provider.stage}/db/password~true}   
+    DB_PASSWORD: ${ssm:/omni-dw/${self:provider.stage}/db/password.unparsed~true}
     DB_DATABASE: ${ssm:/omni-dw/${self:provider.stage}/db/name~true}
     DB_USER: ${ssm:/omni-dw/${self:provider.stage}/db/user~true}
     SMTP_HOST: ${ssm:/omni-dw/hydraFacialReport/${self:provider.stage}/smtp/host~true}
@@ -21,6 +21,8 @@ function:
     SMTP_RECEIVER: ${ssm:/omni-dw/hydraFacialReport/${self:provider.stage}/smtp/receiver~true}
     TABLE_NAME: ${ssm:/omni-dw/hydraFacialReport/${self:provider.stage}/dynamoDb/table/name~true}
     S3_BUCKET_NAME: ${ssm:/hydraFacialReport/${self:provider.stage}/s3_bucket_name}
+    ERROR_SNS_ARN: ${ssm:/omni-reports/${self:provider.stage}/error-notification/sns/arn}
+    FUNCTION_NAME: omni-hydrafacial-report-${self:provider.stage}
 
   package:
     patterns:

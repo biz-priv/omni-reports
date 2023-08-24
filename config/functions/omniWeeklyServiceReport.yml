@@ -23,12 +23,14 @@ function:
     DB_HOST: ${ssm:/omni-dw/${self:provider.stage}/db/host/url~true}
     DB_PORT: ${ssm:/omni-dw/${self:provider.stage}/db/port}
     DB_USERNAME: ${ssm:/omni-dw/${self:provider.stage}/db/user~true}
-    DB_PASSWORD: ${ssm:/omni-dw/${self:provider.stage}/db/password~true}
+    DB_PASSWORD: ${ssm:/omni-dw/${self:provider.stage}/db/password.unparsed~true}
     DB_DATABASE: ${ssm:/omni-dw/${self:provider.stage}/db/name}
     SMTP_HOST: ${ssm:/omni-dw/${self:provider.stage}/smtp/host}
     SMTP_PORT: ${ssm:/omni-dw/${self:provider.stage}/smtp/port}
     SMTP_USERNAME: ${ssm:/omni-dw/${self:provider.stage}/smtp/user}
     SMTP_PASSWORD: ${ssm:/omni-dw/${self:provider.stage}/smtp/password}
     SMTP_FROM: ${ssm:/omni-dw/${self:provider.stage}/smtp/sender}
-    SMTP_TO: ${ssm:/omni-reports/${self:provider.stage}/weekly-service-report/smtp/receiver}
+    SMTP_TO: ${ssm:/omni-reports/${self:provider.stage}/weekly-service-report/smtp/receiver} 
     S3_BUCKET_NAME: ${ssm:/omni-weekly-service-report/${self:provider.stage}/s3_bucket_name}
+    ERROR_SNS_ARN: ${ssm:/omni-reports/${self:provider.stage}/error-notification/sns/arn}
+    FUNCTION_NAME: omni-weekly-service-report-${self:provider.stage}    
