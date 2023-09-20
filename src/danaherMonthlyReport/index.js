@@ -10,7 +10,7 @@ const client = require('ssh2').Client;
 
 module.exports.handler = async () => {
   try {
-    const query = await danaherMonthlyReportQuery(moment().year(), moment().month() + 1);
+    const query = await danaherMonthlyReportQuery(moment().year(), moment().month());
     const redShiftData = await fetchDataFromRedshift(query);
     console.log("redShiftData:", redShiftData[0]);
     const filename = `OMNI_DANAHER_MONTHLY_REPORT_${moment().format('MMMM').toUpperCase()}_${moment().year()}.csv`
