@@ -13,7 +13,8 @@ module.exports.handler = async () => {
     const query = await danaherMonthlyReportQuery(moment().year(), moment().month());
     const redShiftData = await fetchDataFromRedshift(query);
     console.log("redShiftData:", redShiftData[0]);
-    const filename = `OMNI_DANAHER_MONTHLY_REPORT_${moment().format('MMMM').toUpperCase()}_${moment().year()}.csv`
+
+    const filename = `OMNI_DANAHER_MONTHLY_REPORT_${moment().subtract(1, 'months').format('MMMM').toUpperCase()}_${moment().year()}.csv`
     console.log(filename)
     const fields = Object.keys(redShiftData[0]);
     console.log("fields:", fields);
