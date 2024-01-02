@@ -10,19 +10,27 @@ const client = require('ssh2').Client;
 
 module.exports.handler = async () => {
   try {
-    const query = await danaherMonthlyReportQuery(moment().year(), moment().month());
+    const yesterday = moment().subtract(1, "day")
+    // Adjust the month to get the previous month
+    const previousMonth = yesterday.month() + 1;
+    const previousYear = yesterday.year();
+    console.info("year and month:", previousYear, previousMonth)
+    const query = await danaherMonthlyReportQuery(previousYear, previousMonth);
     const redShiftData = await fetchDataFromRedshift(query);
-    console.log("redShiftData:", redShiftData[0]);
-
-    const filename = `OMNI_DANAHER_MONTHLY_REPORT_${moment().subtract(1, 'months').format('MMMM').toUpperCase()}_${moment().year()}.csv`
-    console.log(filename)
-    const fields = Object.keys(redShiftData[0]);
-    console.log("fields:", fields);
-    const opts = { fields };
-    console.log("opts:", opts);
-    const csv = parse(redShiftData, opts);
-    await sendFile(csv, filename)
-    await uploadFileToS3(filename, csv)
+    if (redShiftData?.length > 0) {
+      console.log("redShiftData:", redShiftData[0]);
+      const filename = `OMNI_DANAHER_MONTHLY_REPORT_${moment().subtract(1, 'months').format('MMMM').toUpperCase()}_${previousYear}.csv`
+      console.log(filename)
+      const fields = Object.keys(redShiftData[0]);
+      console.log("fields:", fields);
+      const opts = { fields };
+      console.log("opts:", opts);
+      const csv = parse(redShiftData, opts);
+      await sendFile(csv, filename)
+      await uploadFileToS3(filename, csv)
+    } else {
+      throw new Error('No data retrieved from Redshift.')
+    }
   } catch (err) {
     console.log("handler:error", err);
     // Send a notification to the SNS topic
