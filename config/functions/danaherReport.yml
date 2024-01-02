@@ -11,7 +11,7 @@ function:
     patterns:
      - '!**/*'
      - 'src/danaherMonthlyReport/index.js'  
-     - "src/shared/**"
+     - "src/shared/query/danaherMonthlyReport.js"
   events:
     - schedule: cron(0 15 1 * ? *)
   environment:
