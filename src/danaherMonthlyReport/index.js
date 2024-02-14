@@ -1,12 +1,12 @@
 const AWS = require("aws-sdk");
 const s3 = new AWS.S3();
 const { Client } = require('pg');
-const { danaherMonthlyReportQuery } = require("../shared/query/danaherMonthlyReport");
+const { danaherMonthlyReportQuery, getChargeCodeDescNames } = require("../shared/query/danaherMonthlyReport");
 const { parse } = require("json2csv");
 const sns = new AWS.SNS({ apiVersion: '2010-03-31' });
 const moment = require('moment');
 const client = require('ssh2').Client;
-
+const fs = require('fs')
 
 module.exports.handler = async () => {
   try {
@@ -15,8 +15,14 @@ module.exports.handler = async () => {
     const previousMonth = yesterday.month() + 1;
     const previousYear = yesterday.year();
     console.info("year and month:", previousYear, previousMonth)
-    const query = await danaherMonthlyReportQuery(previousYear, previousMonth);
-    const redShiftData = await fetchDataFromRedshift(query);
+    const intermediateQuery = danaherMonthlyReportQuery(previousYear, previousMonth)
+    const intermediateQueryResult = await fetchDataFromRedshift(intermediateQuery);
+    const query = intermediateQueryResult[0]['?column?']
+    console.info('🙂 -> file: index.js:21 -> module.exports.handler= -> intermediateQueryResult:', intermediateQueryResult);
+    let redShiftData = await fetchDataFromRedshift(query);
+    const fileNumbers = redShiftData.map(item => `'${item["file number"]}'`).join()
+    console.info('🙂 -> file: index.js:30 -> module.exports.handler= -> fileNumbers:', fileNumbers);
+    // return
     if (redShiftData?.length > 0) {
       console.log("redShiftData:", redShiftData[0]);
       const filename = `OMNI_DANAHER_MONTHLY_REPORT_${moment().subtract(1, 'months').format('MMMM').toUpperCase()}_${previousYear}.csv`
@@ -26,6 +32,8 @@ module.exports.handler = async () => {
       const opts = { fields };
       console.log("opts:", opts);
       const csv = parse(redShiftData, opts);
+      fs.writeFileSync(`${filename}`, csv)
+      return;
       await sendFile(csv, filename)
       await uploadFileToS3(filename, csv)
     } else {
@@ -39,7 +47,7 @@ module.exports.handler = async () => {
       Subject: `Lambda function ${process.env.FUNCTION_NAME} have failed.`,
       TopicArn: process.env.ERROR_SNS_ARN,
     };
-    await sns.publish(params).promise();
+    // await sns.publish(params).promise();
   }
   console.log("end of the code");
 };
@@ -48,11 +56,13 @@ module.exports.handler = async () => {
 // function to fetch data from redshift.
 async function fetchDataFromRedshift(danaherMonthlyReportQuery) {
   const client = new Client({
-    host: process.env.DB_HOST,
+    host: 'omni-dw-prod.cnimhrgrtodg.us-east-1.redshift.amazonaws.com',
+    // host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE
+    database: 'prod_datamodel'
+    // database: process.env.DB_DATABASE
   });
   try {
     const query = danaherMonthlyReportQuery
