@@ -20,9 +20,7 @@ module.exports.handler = async () => {
     const query = intermediateQueryResult[0]['?column?']
     console.info('🙂 -> file: index.js:21 -> module.exports.handler= -> intermediateQueryResult:', intermediateQueryResult);
     let redShiftData = await fetchDataFromRedshift(query);
-    const fileNumbers = redShiftData.map(item => `'${item["file number"]}'`).join()
-    console.info('🙂 -> file: index.js:30 -> module.exports.handler= -> fileNumbers:', fileNumbers);
-    // return
+    redShiftData = redShiftData.map(({ 'file number': _, 'posted date': __, ...rest }) => rest);
     if (redShiftData?.length > 0) {
       console.log("redShiftData:", redShiftData[0]);
       const filename = `OMNI_DANAHER_MONTHLY_REPORT_${moment().subtract(1, 'months').format('MMMM').toUpperCase()}_${previousYear}.csv`

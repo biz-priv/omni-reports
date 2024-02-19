@@ -53,7 +53,6 @@ s."consignee city",
 s."consignee state",
 s."consignee country",
 s."consignee zip",
-s."file number" as "File Number2",
 detl.Dims,
 detl.pieces,
 detl1.dim_factor,
@@ -94,6 +93,7 @@ left outer join
 	sum(total) as "total charges",
 	max(total) as "TopLine charge",
     max("invoice printed date") as "invoice printed date",
+    max("posted date") as "posted date",
     ' || LISTAGG('MAX(CASE WHEN "charge code description" = ' || QUOTE_LITERAL(cc."charge code description") || ' THEN total END) AS ' || QUOTE_IDENT(cc."charge code description"), ', ') WITHIN GROUP (ORDER BY cc."charge code description") || '
     FROM datamart.ar_invoices
     -- WHERE "file number" = \\'4677697\\'
@@ -101,7 +101,7 @@ left outer join
 )charges 
 on s."file number" = charges."file number"
 where "original bill to number"  in (\\'2398\\',\\'12676\\',\\'15059\\',\\'4872\\',\\'7908\\',\\'12170\\',\\'2097\\',\\'7893\\',\\'12172\\',\\'12222\\',\\'11445\\',\\'SCIDFWDFW\\',\\'ABSCIEXCORP\\',\\'ABSCIEX\\',\\'ABSDISSIN\\',\\'ABSMANSFO\\',\\'LEIMICORD\\'
-)and "source system" in (\\'CW\\',\\'WT\\') and s.division <> \\'Epic\\' AND EXTRACT(YEAR FROM s."file date") = ${year} AND EXTRACT(MONTH FROM s."file date") = ${month} order by s."file date"
+)and "source system" in (\\'CW\\',\\'WT\\') and s.division <> \\'Epic\\' and charges."posted date" is not NULL AND EXTRACT(YEAR FROM s."file date") = ${year} AND EXTRACT(MONTH FROM s."file date") = ${month} order by s."file date"
 --and s."file number" = \\'4677697\\'
 '
 FROM charge_codes cc
