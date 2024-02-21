@@ -1,7 +1,7 @@
 const AWS = require("aws-sdk");
 const s3 = new AWS.S3();
 const { Client } = require('pg');
-const { danaherMonthlyReportQuery, getChargeCodeDescNames } = require("../shared/query/danaherMonthlyReport");
+const { danaherMonthlyReportQuery} = require("../shared/query/danaherMonthlyReport");
 const { parse } = require("json2csv");
 const sns = new AWS.SNS({ apiVersion: '2010-03-31' });
 const moment = require('moment');
