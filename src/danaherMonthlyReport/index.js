@@ -15,6 +15,7 @@ module.exports.handler = async () => {
     const previousYear = yesterday.year();
     console.info("year and month:", previousYear, previousMonth)
     const intermediateQuery = danaherMonthlyReportQuery(previousYear, previousMonth)
+    console.log('intermediate query:', intermediateQuery)
     const intermediateQueryResult = await fetchDataFromRedshift(intermediateQuery);
     const query = intermediateQueryResult[0]['?column?']
     console.info('🙂 -> file: index.js:21 -> module.exports.handler= -> intermediateQueryResult:', intermediateQueryResult);
@@ -24,6 +25,7 @@ module.exports.handler = async () => {
       console.log("redShiftData:", redShiftData[0]);
       const filename = `OMNI_DANAHER_MONTHLY_REPORT_${moment().subtract(1, 'months').format('MMMM').toUpperCase()}_${previousYear}.csv`
       console.log(filename)
+      return;
       const fields = Object.keys(redShiftData[0]);
       console.log("fields:", fields);
       const opts = { fields };
