@@ -58,8 +58,9 @@ async function fetchDataFromRedshift(danaherMonthlyReportQuery) {
     database: process.env.DB_DATABASE
   });
   try {
+    const query = danaherMonthlyReportQuery
     await client.connect();
-    const res = await client.query(danaherMonthlyReportQuery);
+    const res = await client.query(query);
     const queryData = res.rows
     await client.end();
     return queryData
