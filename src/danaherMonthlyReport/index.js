@@ -1,12 +1,11 @@
 const AWS = require("aws-sdk");
 const s3 = new AWS.S3();
 const { Client } = require('pg');
-const { danaherMonthlyReportQuery } = require("../shared/query/danaherMonthlyReport");
+const { danaherMonthlyReportQuery} = require("../shared/query/danaherMonthlyReport");
 const { parse } = require("json2csv");
 const sns = new AWS.SNS({ apiVersion: '2010-03-31' });
 const moment = require('moment');
 const client = require('ssh2').Client;
-
 
 module.exports.handler = async () => {
   try {
@@ -15,8 +14,12 @@ module.exports.handler = async () => {
     const previousMonth = yesterday.month() + 1;
     const previousYear = yesterday.year();
     console.info("year and month:", previousYear, previousMonth)
-    const query = await danaherMonthlyReportQuery(previousYear, previousMonth);
-    const redShiftData = await fetchDataFromRedshift(query);
+    const intermediateQuery = danaherMonthlyReportQuery(previousYear, previousMonth)
+    const intermediateQueryResult = await fetchDataFromRedshift(intermediateQuery);
+    const query = intermediateQueryResult[0]['?column?']
+    console.info('🙂 -> file: index.js:21 -> module.exports.handler= -> intermediateQueryResult:', intermediateQueryResult);
+    let redShiftData = await fetchDataFromRedshift(query);
+    redShiftData = redShiftData.map(({ 'file number': _, 'posted date': __, ...rest }) => rest);
     if (redShiftData?.length > 0) {
       console.log("redShiftData:", redShiftData[0]);
       const filename = `OMNI_DANAHER_MONTHLY_REPORT_${moment().subtract(1, 'months').format('MMMM').toUpperCase()}_${previousYear}.csv`
