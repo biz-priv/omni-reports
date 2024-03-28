@@ -32,7 +32,7 @@ function danaherMonthlyReportQuery(year, month) {
     )
 SELECT 
 'select --s.*,
-mode,"original bill to number",c.city,c.state,c.zip,s."house waybill",
+distinct s."house waybill", mode,"original bill to number",c.city,c.state,c.zip,s."house waybill",
 s."service level" ,
 TO_CHAR(s."file date"::timestamp, \\'YYYY-MM-DD\\') AS "Shipment Date",
 TO_CHAR(s."ready date"::timestamp, \\'YYYY-MM-DD HH24:MI:SS:MS\\') AS "Ready Date",
@@ -62,12 +62,16 @@ charges.*
 from datamart.shipment_extract s
 left outer join (select * from customers  where 
 nbr in (\\'2398\\',\\'12676\\',\\'15059\\',\\'4872\\',\\'7908\\',\\'12170\\',\\'2097\\',\\'7893\\',\\'12172\\',\\'12222\\',\\'11445\\',\\'SCIDFWDFW\\',\\'ABSCIEXCORP\\',\\'ABSCIEX\\',\\'ABSDISSIN\\',\\'ABSMANSFO\\',\\'LEIMICORD\\')
-and source_system  in (\\'CW\\',\\'WT\\') and division <> \\'Epic\\')c
+and source_system  in (\\'CW\\',\\'WT\\') and division not in (\\'EPC\\', \\'Epic\\'))c
 on s."original bill to number" = c.nbr
-left outer join (select file_nbr,ref_nbr from shipment_ref sr 
-where --file_nbr = \\'4143990\\'
-customer_type = \\'S\\'
-and ref_typeid = \\'REF\\')shipperref
+left outer join (
+select file_nbr,ref_nbr,ref_typeid from(
+select 
+	file_nbr,ref_nbr,ref_typeid, row_number () over(partition by file_nbr order by seq_nbr desc) as rn
+from 
+	shipment_ref sr )
+where rn=1
+)shipperref
 on s."file number" = shipperref.file_nbr
 left outer join 
 (select file_nbr,listagg(dims,\\', \\') within group (order by id desc) as Dims,pieces
@@ -94,14 +98,14 @@ left outer join
 	max(total) as "TopLine charge",
     max("invoice printed date") as "invoice printed date",
     max("posted date") as "posted date",
-    ' || LISTAGG('MAX(CASE WHEN "charge code description" = ' || QUOTE_LITERAL(cc."charge code description") || ' THEN total END) AS ' || QUOTE_IDENT(cc."charge code description"), ', ') WITHIN GROUP (ORDER BY cc."charge code description") || '
+    ' || LISTAGG('MAX(CASE WHEN "charge code description" = ' || QUOTE_LITERAL(cc."charge code description") || ' THEN total  END) AS ' || QUOTE_IDENT(cc."charge code description"), ', ') WITHIN GROUP (ORDER BY cc."charge code description") || '
     FROM datamart.ar_invoices
     -- WHERE "file number" = \\'4677697\\'
     GROUP BY "file number"
 )charges 
 on s."file number" = charges."file number"
 where "original bill to number"  in (\\'2398\\',\\'12676\\',\\'15059\\',\\'4872\\',\\'7908\\',\\'12170\\',\\'2097\\',\\'7893\\',\\'12172\\',\\'12222\\',\\'11445\\',\\'SCIDFWDFW\\',\\'ABSCIEXCORP\\',\\'ABSCIEX\\',\\'ABSDISSIN\\',\\'ABSMANSFO\\',\\'LEIMICORD\\'
-)and "source system" in (\\'CW\\',\\'WT\\') and s.division <> \\'Epic\\' and charges."posted date" is not NULL AND EXTRACT(YEAR FROM s."file date") = ${year} AND EXTRACT(MONTH FROM s."file date") = ${month} order by s."file date"
+)and "source system" in (\\'CW\\',\\'WT\\') and s.division not in (\\'EPC\\', \\'Epic\\') and charges."posted date" is not NULL AND EXTRACT(YEAR FROM s."file date") = ${year} AND EXTRACT(MONTH FROM s."file date") = ${month} order by s."house waybill", s."file date"
 --and s."file number" = \\'4677697\\'
 '
 FROM charge_codes cc
