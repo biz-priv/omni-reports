@@ -1,3 +1,10 @@
+/*
+* File: src\shared\dbConnectivity\index.js
+* Project: Omni-reports
+* Author: Bizcloud Experts
+* Date: 2023-05-05
+* Confidential and Proprietary
+*/
 const pg = require("pg");
 
 

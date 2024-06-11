@@ -1,3 +1,10 @@
+/*
+* File: src\shared\query\omniOverstockWeeklyReportsQuery.js
+* Project: Omni-reports
+* Author: Bizcloud Experts
+* Date: 2023-05-05
+* Confidential and Proprietary
+*/
 const omniOverstockWeeklyReportsSqlQuery = `select
   s.file_date as "Order Create Date - Y-M-D",
   s.house_bill_nbr as "HouseBill",

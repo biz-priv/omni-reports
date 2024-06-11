@@ -1,3 +1,10 @@
+/*
+* File: src\mcleodFinanceReports\index.js
+* Project: Omni-reports
+* Author: Bizcloud Experts
+* Date: 2023-05-12
+* Confidential and Proprietary
+*/
 const { send_response } = require('../shared/utils/responses');
 const { sqlConfig } = require("../shared/dbConnectivity/index");
 const sql = require('mssql');

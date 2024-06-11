@@ -1,3 +1,10 @@
+/*
+* File: src\shared\filterReportData\index.js
+* Project: Omni-reports
+* Author: Bizcloud Experts
+* Date: 2023-02-21
+* Confidential and Proprietary
+*/
 const { scanTableData } = require('../dynamoDb/index');
 
 async function filterReportData(result, tableName) {

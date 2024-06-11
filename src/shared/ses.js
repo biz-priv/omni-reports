@@ -1,3 +1,10 @@
+/*
+* File: src\shared\ses.js
+* Project: Omni-reports
+* Author: Bizcloud Experts
+* Date: 2023-02-10
+* Confidential and Proprietary
+*/
 const nodemailer = require("nodemailer");
 
 async function sendEmail(sesParams) {

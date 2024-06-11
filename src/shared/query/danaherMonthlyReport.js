@@ -1,3 +1,10 @@
+/*
+* File: src\shared\query\danaherMonthlyReport.js
+* Project: Omni-reports
+* Author: Bizcloud Experts
+* Date: 2024-03-28
+* Confidential and Proprietary
+*/
 function danaherMonthlyReportQuery(year, month) {
     const query = `
     WITH charge_codes AS (

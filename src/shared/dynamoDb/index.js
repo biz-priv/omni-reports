@@ -1,3 +1,10 @@
+/*
+* File: src\shared\dynamoDb\index.js
+* Project: Omni-reports
+* Author: Bizcloud Experts
+* Date: 2023-02-21
+* Confidential and Proprietary
+*/
 const AWS = require("aws-sdk");
 
 /* insert record in table */
