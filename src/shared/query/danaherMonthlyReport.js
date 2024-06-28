@@ -101,6 +101,7 @@ left outer join
     ' || LISTAGG('MAX(CASE WHEN "charge code description" = ' || QUOTE_LITERAL(cc."charge code description") || ' THEN total  END) AS ' || QUOTE_IDENT(cc."charge code description"), ', ') WITHIN GROUP (ORDER BY cc."charge code description") || '
     FROM datamart.ar_invoices
     -- WHERE "file number" = \\'4677697\\'
+    where ar_invoices."source system" = \\'WT\\'
     GROUP BY "file number"
 )charges 
 on s."file number" = charges."file number"
