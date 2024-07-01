@@ -1,3 +1,10 @@
+/*
+* File: src\omniOverstockReport\index.js
+* Project: Omni-reports
+* Author: Bizcloud Experts
+* Date: 2023-08-23
+* Confidential and Proprietary
+*/
 const AWS = require("aws-sdk");
 const s3 = new AWS.S3();
 const { Client } = require('pg');

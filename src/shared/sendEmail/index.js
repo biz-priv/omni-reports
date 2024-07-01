@@ -1,3 +1,10 @@
+/*
+* File: src\shared\sendEmail\index.js
+* Project: Omni-reports
+* Author: Bizcloud Experts
+* Date: 2023-02-21
+* Confidential and Proprietary
+*/
 async function send_email(transporter, today) {
     return new Promise((resolve, reject) => {
         transporter.sendMail(

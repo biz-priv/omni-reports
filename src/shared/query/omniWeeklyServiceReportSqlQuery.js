@@ -1,3 +1,10 @@
+/*
+* File: src\shared\query\omniWeeklyServiceReportSqlQuery.js
+* Project: Omni-reports
+* Author: Bizcloud Experts
+* Date: 2023-05-05
+* Confidential and Proprietary
+*/
 const omniWeeklyServiceReportSqlQuery = `
     select
     s.pickup_date as "actualDepartDate",

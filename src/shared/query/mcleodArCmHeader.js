@@ -1,3 +1,10 @@
+/*
+* File: src\shared\query\mcleodArCmHeader.js
+* Project: Omni-reports
+* Author: Bizcloud Experts
+* Date: 2023-05-09
+* Confidential and Proprietary
+*/
 const mcleodArCmHeader = `SELECT distinct CASE
 WHEN base.charge_type = 'linehaul' THEN
 Concat('OL-', base.bill_type, '-', bh.invoice_no_string)
