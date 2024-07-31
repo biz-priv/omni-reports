@@ -11,6 +11,7 @@ function:
     patterns:
      - '!**/*'
      - 'src/doterraProject44andSpacexReport/index.js'  
+     - "src/shared/query/doterraProject44Report.js"  
 
   events:
     # - existingS3:
