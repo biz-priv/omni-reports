@@ -8,6 +8,8 @@ const ses = new AWS.SES({ apiVersion: '2010-12-01' });
 const transporter = nodemailer.createTransport({
   SES: ses
 });
+const { get } = require('lodash');
+const s3 = new AWS.S3();
 
 // Define email parameters
 const sender = 'no-reply@omnilogistics.com';
@@ -30,7 +32,7 @@ module.exports.handler = async (event, context) => {
     return 'Success';
   } catch (error) {
     console.error('Main lambda error: ', error);
-    await putItem(dynamoData);
+    // await putItem(dynamoData);
     return 'Failed';
   }
 };
