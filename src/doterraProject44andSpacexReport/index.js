@@ -81,11 +81,11 @@ function processCSV(csvData, s3KeyType) {
         const processedData = results.map((row) => {
           if (s3KeyType === 'doterra_' + process.env.STAGE) {
             return {
-              shipment_id: row[0] || 'NULL',
-              bol: row[1] || 'NULL',
-              carrier_id: row[2] || 'NULL',
-              container_id: row[3] || 'NULL',
-              order_ref: row[4] || 'NULL',
+              shipment_id: get(row,'[0]') ?? 'NULL',
+              bol: get(row,'[1]') ?? 'NULL',
+              carrier_id: get(row,'[2]') ?? 'NULL',
+              container_id: get(row,'[3]') ?? 'NULL',
+              order_ref: get(row,'[4]') ?? 'NULL',
             };
           } else if (s3KeyType === 'spacex_' + process.env.STAGE) {
             return {
