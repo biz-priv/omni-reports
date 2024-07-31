@@ -6,7 +6,7 @@ function:
   memorySize: 1024
   timeout: 90
   tags:
-    Name: overstock-weekly-reports
+    Name: omni-overstock-weekly-reports-${self:provider.stage}
   layers:
     - { Ref: OmniReportsLayerLambdaLayer }
   package:

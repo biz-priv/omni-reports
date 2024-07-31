@@ -6,7 +6,7 @@ function:
   memorySize: 1024
   timeout: 90
   tags:
-    Name: danaher-monthly-reports
+    Name: omni-danaher-monthly-reports-${self:provider.stage}
   layers:
     - { Ref: OmniReportsLayerLambdaLayer }
   package:

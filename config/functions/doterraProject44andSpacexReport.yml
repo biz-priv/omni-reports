@@ -5,6 +5,8 @@ function:
   handler: src/doterraProject44andSpacexReport/index.handler
   memorySize: 1024
   timeout: 90
+  tags:
+    Name: omni-doterra-project44-and-spacex-reports-${self:provider.stage}
   layers:
     - { Ref: OmniReportsLayerLambdaLayer }
   package:

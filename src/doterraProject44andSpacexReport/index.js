@@ -1,3 +1,11 @@
+/*
+* File: src\doterraProject44andSpacexReport\index.js
+* Project: Omni-reports
+* Author: Bizcloud Experts
+* Date: 2024-08-01
+* Confidential and Proprietary
+*/
+
 'use strict';
 
 const AWS = require('aws-sdk');
@@ -59,9 +67,6 @@ async function getS3Data(bucket, key) {
     throw error;
   }
 }
-
-const stream = require('stream');
-const csv = require('csv-parser');
 
 function processCSV(csvData, s3KeyType) {
   return new Promise((resolve, reject) => {
