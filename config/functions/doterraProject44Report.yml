@@ -12,7 +12,7 @@ function:
      - '!**/*'
      - 'src/doterraProject44Report/index.js'  
      - "src/shared/query/doterraProject44Report.js"
-     
+
   events:
     - existingS3:
         bucket: 'dw-datafiles'
@@ -20,6 +20,13 @@ function:
           - s3:ObjectCreated:*
         rules:
           - prefix: 'doterra/'
+          - suffix: '.csv'
+    - existingS3:
+        bucket: 'dw-datafiles'
+        events:
+          - s3:ObjectCreated:*
+        rules:
+          - prefix: 'spacex/'
           - suffix: '.csv'
   # environment:
   #   DB_PORT: ${ssm:/omni-dw/${self:provider.stage}/db/port}
