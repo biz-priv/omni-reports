@@ -13,7 +13,7 @@ provider:
       - ${ssm:/omni-dw/${self:provider.stage}/lambda/sgId}
     subnetIds:
       - ${ssm:/omni-dw/${self:provider.stage}/lambda/subnetA}
-  runtime: nodejs14.x
+  runtime: nodejs20.x
 custom:
   region: ${opt:region, 'us-east-1'}
   stage: ${opt:stage, 'dev'}
@@ -34,7 +34,7 @@ layers:
     name: ${self:service}-layer-${self:provider.stage}
     description: Omni reports lambda layer for all node modules - ${self:provider.stage}
     compatibleRuntimes:
-      - nodejs14.x
+      - nodejs20.x
     retain: false
 
 functions:
