@@ -12,7 +12,7 @@ function:
      - '!**/*'
      - 'src/doterraProject44Report/index.js'  
      - "src/shared/query/doterraProject44Report.js"
-     - 
+     
   events:
     - existingS3:
         bucket: 'dw-datafiles'
