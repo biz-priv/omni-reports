@@ -160,7 +160,7 @@ function processCSV(csvData, s3KeyType) {
               'Amount Tax Excl (in invoice currency)': get(row,'[68]') ?? 'NULL',
               'consolID': get(row,'[69]') ?? 'NULL',
               'Comments': get(row,'[70]') ?? 'NULL',
-              'POD Nam': get(row,'[71]') ?? 'NULL',
+              'POD Name': get(row,'[71]') ?? 'NULL',
               'Exceptions / Delay Information': get(row,'[72]') ?? 'NULL',
             };
           }
