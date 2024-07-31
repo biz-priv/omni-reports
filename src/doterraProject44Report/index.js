@@ -16,7 +16,7 @@ const transporter = nodemailer.createTransport({
 
 const sender = 'no-reply@omnilogistics.com';
 const recipient = 'sreddy@bizcloudexperts.com, mohammed.sazeed@bizcloudexperts.com, sunilkunapareddys@gmail.com, mohammedsazeed2@gmail.com';
-const subject = 'doTerra Reports - 3107';
+const subject = 'doTerra OCEAN PROD OMNI - dev';
 const bodyText = 'Hello,\n\nPlease see the attached file.\n\nBest regards.';
 
 module.exports.handler = async (event, context) => {
