@@ -13,7 +13,11 @@ provider:
       - ${ssm:/omni-dw/${self:provider.stage}/lambda/sgId}
     subnetIds:
       - ${ssm:/omni-dw/${self:provider.stage}/lambda/subnetA}
-  runtime: nodejs14.x
+  runtime: nodejs20.x
+  environment:
+    REGION: ${self:custom.region}
+    STAGE: ${self:custom.stage}
+    ERROR_SNS_TOPIC_ARN: ${ssm:/omni-reports/${self:provider.stage}/error-notification/sns/arn}
 custom:
   region: ${opt:region, 'us-east-1'}
   stage: ${opt:stage, 'dev'}
@@ -24,6 +28,7 @@ custom:
 
 plugins:
  - serverless-offline
+ - serverless-plugin-existing-s3
 
 package:
   individually: true
@@ -34,7 +39,7 @@ layers:
     name: ${self:service}-layer-${self:provider.stage}
     description: Omni reports lambda layer for all node modules - ${self:provider.stage}
     compatibleRuntimes:
-      - nodejs14.x
+      - nodejs20.x
     retain: false
 
 functions:
@@ -43,3 +48,4 @@ functions:
   hydraFacialReport: ${file(config/functions/hydraFacialReport.yml):function}
   # mcleodFinanceReports: ${file(config/functions/mcleodFinanceReports.yml):function}
   danaherMonthlyReport: ${file(config/functions/danaherReport.yml):function}
+  doterraProject44andSpacexReport: ${file(config/functions/doterraProject44andSpacexReport.yml):function}
