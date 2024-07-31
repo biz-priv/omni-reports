@@ -12,21 +12,21 @@ function:
      - '!**/*'
      - 'src/doterraProject44andSpacexReport/index.js'  
 
-  # events:
-  #   # - existingS3:
-  #   #     bucket: ${ssm:/${self:service}/${self:provider.stage}/s3-bucket-name}
-  #   #     events:
-  #   #       - s3:ObjectCreated:*
-  #   #     rules:
-  #   #       - prefix: ${ssm:/${self:service}/${self:provider.stage}/s3-prefix/doterra}
-  #   #       - suffix: ${ssm:/${self:service}/${self:provider.stage}/s3-suffix}
-  #   - existingS3:
-  #       bucket: ${ssm:/${self:service}/${self:provider.stage}/s3-bucket-name}
-  #       events:
-  #         - s3:ObjectCreated:*
-  #       rules:
-  #         - prefix: ${ssm:/${self:service}/${self:provider.stage}/s3-prefix/spacex}
-  #         - suffix: ${ssm:/${self:service}/${self:provider.stage}/s3-suffix}
+  events:
+    # - existingS3:
+    #     bucket: ${ssm:/${self:service}/${self:provider.stage}/s3-bucket-name}
+    #     events:
+    #       - s3:ObjectCreated:*
+    #     rules:
+    #       - prefix: ${ssm:/${self:service}/${self:provider.stage}/s3-prefix/doterra}
+    #       - suffix: ${ssm:/${self:service}/${self:provider.stage}/s3-suffix}
+    - existingS3:
+        bucket: ${ssm:/${self:service}/${self:provider.stage}/s3-bucket-name}
+        events:
+          - s3:ObjectCreated:*
+        rules:
+          - prefix: ${ssm:/${self:service}/${self:provider.stage}/s3-prefix/spacex}
+          - suffix: ${ssm:/${self:service}/${self:provider.stage}/s3-suffix}
   environment:
     STAGE: ${self:provider.stage}
     OMNI_NO_REPLY_EMAIL: ${ssm:/omni-204-create-shipment/${self:provider.stage}/omni-no-reply/email}
