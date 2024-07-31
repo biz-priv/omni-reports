@@ -24,6 +24,7 @@ custom:
 
 plugins:
  - serverless-offline
+ - serverless-plugin-existing-s3
 
 package:
   individually: true
