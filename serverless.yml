@@ -43,3 +43,4 @@ functions:
   hydraFacialReport: ${file(config/functions/hydraFacialReport.yml):function}
   # mcleodFinanceReports: ${file(config/functions/mcleodFinanceReports.yml):function}
   danaherMonthlyReport: ${file(config/functions/danaherReport.yml):function}
+  doterraProject44Report: ${file(config/functions/doterraProject44Report.yml):function}
