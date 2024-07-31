@@ -1,0 +1,34 @@
+---
+function:
+  name: omni-doterra-project44-and-spacex-reports-${self:provider.stage}
+  description: sending doterra project44 and spacex reports
+  handler: src/doterraProject44andSpacexReport/index.handler
+  memorySize: 1024
+  timeout: 90
+  layers:
+    - { Ref: OmniReportsLayerLambdaLayer }
+  package:
+    patterns:
+     - '!**/*'
+     - 'src/doterraProject44andSpacexReport/index.js'  
+
+  events:
+    # - existingS3:
+    #     bucket: ${ssm:/${self:service}/${self:provider.stage}/s3-bucket-name}
+    #     events:
+    #       - s3:ObjectCreated:*
+    #     rules:
+    #       - prefix: ${ssm:/${self:service}/${self:provider.stage}/s3-prefix/doterra}
+    #       - suffix: ${ssm:/${self:service}/${self:provider.stage}/s3-suffix}
+    - existingS3:
+        bucket: ${ssm:/${self:service}/${self:provider.stage}/s3-bucket-name}
+        events:
+          - s3:ObjectCreated:*
+        rules:
+          - prefix: ${ssm:/${self:service}/${self:provider.stage}/s3-prefix/spacex}
+          - suffix: ${ssm:/${self:service}/${self:provider.stage}/s3-suffix}
+  environment:
+    STAGE: ${self:provider.stage}
+    OMNI_NO_REPLY_EMAIL: ${ssm:/omni-204-create-shipment/${self:provider.stage}/omni-no-reply/email}
+    DOTERRA_RECIPIENTS: ${ssm:/${self:service}/${self:provider.stage}/doterra-report-recipients}
+    SPACEX_RECIPIENTS: ${ssm:/${self:service}/${self:provider.stage}/spacex-report-recipients}

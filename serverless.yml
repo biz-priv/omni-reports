@@ -14,6 +14,10 @@ provider:
     subnetIds:
       - ${ssm:/omni-dw/${self:provider.stage}/lambda/subnetA}
   runtime: nodejs20.x
+  environment:
+    REGION: ${self:custom.region}
+    STAGE: ${self:custom.stage}
+    ERROR_SNS_TOPIC_ARN: ${ssm:/omni-reports/${self:provider.stage}/error-notification/sns/arn}
 custom:
   region: ${opt:region, 'us-east-1'}
   stage: ${opt:stage, 'dev'}
@@ -44,4 +48,4 @@ functions:
   hydraFacialReport: ${file(config/functions/hydraFacialReport.yml):function}
   # mcleodFinanceReports: ${file(config/functions/mcleodFinanceReports.yml):function}
   danaherMonthlyReport: ${file(config/functions/danaherReport.yml):function}
-  doterraProject44Report: ${file(config/functions/doterraProject44Report.yml):function}
+  doterraProject44andSpacexReport: ${file(config/functions/doterraProject44andSpacexReport.yml):function}
