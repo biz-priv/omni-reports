@@ -28,7 +28,6 @@ custom:
 
 plugins:
  - serverless-offline
- - serverless-plugin-existing-s3
 
 package:
   individually: true
@@ -45,7 +44,6 @@ layers:
 functions:
   omniOverstockWeeklyReport: ${file(config/functions/omniOverstockWeeklyReport.yml):function}
   omniWeeklyServiceReport: ${file(config/functions/omniWeeklyServiceReport.yml):function} 
-  hydraFacialReport: ${file(config/functions/hydraFacialReport.yml):function}
+  # hydraFacialReport: ${file(config/functions/hydraFacialReport.yml):function}
   # mcleodFinanceReports: ${file(config/functions/mcleodFinanceReports.yml):function}
   danaherMonthlyReport: ${file(config/functions/danaherReport.yml):function}
-  doterraProject44andSpacexReport: ${file(config/functions/doterraProject44andSpacexReport.yml):function}
