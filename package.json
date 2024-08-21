@@ -17,7 +17,6 @@
     "fs": "^0.0.1-security",
     "imap": "^0.8.19",
     "json2csv": "^6.0.0-alpha.2",
-    "lodash": "^4.17.21",
     "mailparser": "^3.6.3",
     "mssql": "^9.1.1",
     "nodemailer": "^6.9.1",
