@@ -5,6 +5,8 @@ function:
   handler: src/omniServiceReport/index.handler
   memorySize: 1024
   timeout: 90
+  tags:
+    Name: omni-weekly-service-report-${self:provider.stage}
   vpc:
     securityGroupIds:
       - ${ssm:/omni-dw/${self:provider.stage}/lambda/sgId}

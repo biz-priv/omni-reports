@@ -5,6 +5,8 @@ function:
   handler: src/danaherMonthlyReport/index.handler
   memorySize: 1024
   timeout: 90
+  tags:
+    Name: omni-danaher-monthly-reports-${self:provider.stage}
   layers:
     - { Ref: OmniReportsLayerLambdaLayer }
   package:

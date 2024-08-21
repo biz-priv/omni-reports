@@ -4,6 +4,8 @@ function:
   handler: src/mcleodFinanceReports/index.handler
   memorySize: 1024
   timeout: 90
+  tags:
+    Name: omni-mcleod-finance-reports-${self:provider.stage}
   layers:
     - { Ref: OmniReportsLayerLambdaLayer }
   environment:

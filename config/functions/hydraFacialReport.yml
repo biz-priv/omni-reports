@@ -4,6 +4,8 @@ function:
   handler: src/hydraFacialReport/index.handler
   memorySize: 1024
   timeout: 90
+  tags:
+    Name: omni-hydrafacial-report-${self:provider.stage}
   layers:
     - { Ref: OmniReportsLayerLambdaLayer }
   environment:

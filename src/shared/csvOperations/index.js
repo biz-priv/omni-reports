@@ -1,3 +1,10 @@
+/*
+* File: src\shared\csvOperations\index.js
+* Project: Omni-reports
+* Author: Bizcloud Experts
+* Date: 2023-05-01
+* Confidential and Proprietary
+*/
 const ObjectsToCsv = require('objects-to-csv');
 
 async function createCSV(reportData) {
